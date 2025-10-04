@@ -91,13 +91,21 @@ function getTasksByPriority(priority: Priority): Task[] {
 console.log('getTasksByPriority(defaultPriority):', getTasksByPriority(DEFAULT_PRIORITY));
 
 function getTasksByCreatedAt(createdAt: Date): Task[] {
-    return tasks.filter(task => task.createdAt.toISOString() === createdAt.toISOString());
+    return tasks.filter(task => {
+        if (typeof task.createdAt === 'string') {
+            return task.createdAt === createdAt.toISOString();
+        }
+        return task.createdAt.toISOString() === createdAt.toISOString();
+    });
 }
 console.log('getTasksByCreatedAt(2025-01-01):', getTasksByCreatedAt(new Date('2025-01-01'))); 
 
 function isTaskCompletedBeforeDeadline(taskId: string | number): boolean {
     const task = tasks.find(task => task.id === taskId);
     if (task) {
+        if (typeof task.deadline === 'string') {
+            return task.deadline === new Date().toISOString() && task.status === Status.DONE;
+        }       
         return task.deadline.toISOString() < new Date().toISOString() && task.status === Status.DONE;
     }
     console.log(`Task ${taskId} not found`);

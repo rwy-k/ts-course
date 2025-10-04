@@ -14,8 +14,8 @@ export type Task = {
     id: string | number;
     title: string;
     description?: string;
-    createdAt: Date;
+    createdAt: string | Date;
     status?: Status;
     priority?: Priority;
-    deadline: Date;
+    deadline: string | Date;
 };
