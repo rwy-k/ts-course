@@ -1,14 +1,27 @@
 const name: string = "John";
 const dateBirth: string| Date = new Date("1990-01-01");
 const phoneNumber: string|number = "+380991234567";
-const children: null | number = null;
-const zip: undefined | number = undefined;
+let children: null | number = null;
+let zip: undefined | number = undefined;
 
-type funcArgument = string | Date | number | null | undefined;
-type funcArguments = [funcArgument?, funcArgument?, funcArgument?, funcArgument?];
+type FuncArgument = string | Date | number | null | undefined;
+type FuncArguments = [FuncArgument?, FuncArgument?, FuncArgument?, FuncArgument?];
 
-const printUserInfo = (...args: funcArguments): void => {
-    console.log('User info:', args.join(', '));
+const printUserInfo = (...args: FuncArguments): void => {
+    console.log('User info:');
+    for (const arg of args) {
+        if (arg === null || arg === undefined) {
+            console.log('Missing value');
+        } else if (arg instanceof Date) {
+            console.log(arg.toISOString());
+        } else {
+            console.log(arg);
+        }
+    }
+    console.log('--------------------------------');
 }
 
-printUserInfo(name, dateBirth, phoneNumber);
+printUserInfo(name, dateBirth, children);
+
+children = 1;
+printUserInfo(name, dateBirth, phoneNumber, children);
