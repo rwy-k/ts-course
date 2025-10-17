@@ -11,11 +11,11 @@ export enum Priority {
 }
 
 export type Task = {
-    id: string | number;
+    id: string;
     title: string;
     description?: string;
-    createdAt: string | Date;
+    createdAt: Date;
     status?: Status;
     priority?: Priority;
-    deadline: string | Date;
+    deadline: Date;
 };

@@ -1,4 +1,4 @@
-import tasksJSON from './assets/tasks.json' with { type: 'json' };
+import tasksJSON from './assets/tasks.json';
 import { z } from 'zod';
 import { DEFAULT_PRIORITY, DEFAULT_STATUS, DEFAULT_DESCRIPTION } from './constants';
 import { Task, Status, Priority } from './dto/Task';
@@ -7,7 +7,7 @@ const statusSchema = z.enum([Status.TODO, Status.IN_PROGRESS, Status.DONE]);
 const prioritySchema = z.enum([Priority.LOW, Priority.MEDIUM, Priority.HIGH]);
 
 const taskSchema = z.object({
-    id: z.string().or(z.number()),
+    id: z.string(),
     title: z.string(),
     description: z.string().optional().default(DEFAULT_DESCRIPTION),
     createdAt: z.string().transform(str => new Date(str)),
@@ -19,7 +19,7 @@ const tasksSchema = z.array(taskSchema);
 
 const tasks: Task[] = tasksSchema.parse(tasksJSON);
 
-function printTaskDetails(taskId: string | number) {
+function printTaskDetails(taskId: string) {
     const task = tasks.find(task => task.id === taskId);
     if (task) {
         console.log('--------------------------------');
@@ -37,12 +37,12 @@ function printTaskDetails(taskId: string | number) {
 printTaskDetails('1');
 
 function addTask(task: Task): void {
-    const taskToAdd: Task = 'status' in task && 'priority' in task && 'description' in task ? task as Task : {
-        status: DEFAULT_STATUS,
-        priority: DEFAULT_PRIORITY,
-        description: DEFAULT_DESCRIPTION,
+    const taskToAdd: Task = {
         ...task,
-    };
+        status: task.status || DEFAULT_STATUS,
+        priority: task.priority || DEFAULT_PRIORITY,
+        description: task.description || DEFAULT_DESCRIPTION,
+    }
     tasks.push(taskToAdd);
 }
 
@@ -55,10 +55,21 @@ addTask({
 });
 printTaskDetails('11');
 
-function updateTask(taskId: string | number, task: Partial<Task>): void {
+function updateTask(taskId: string, task: Partial<Task>): void {
+    if (task.id || task.createdAt) {
+        throw new Error('Id and createdAt cannot be updated');
+    }
     const taskIndex = tasks.findIndex(task => task.id === taskId);
-    if (taskIndex !== -1) {
-        tasks[taskIndex] = { ...tasks[taskIndex], ...task } as Task;
+    if (tasks[taskIndex]) {
+        tasks[taskIndex] = {
+            id: taskId,
+            title: task.title || tasks[taskIndex]!.title,
+            createdAt: tasks[taskIndex]!.createdAt,
+            deadline: task.deadline || tasks[taskIndex]!.deadline,
+            status: task.status || tasks[taskIndex]!.status,
+            priority: task.priority || tasks[taskIndex]!.priority,
+            description: task.description || tasks[taskIndex]!.description,
+        };
     } else {
         console.log(`Task ${taskId} not found`);
     }
@@ -69,7 +80,7 @@ updateTask('11', {
 });
 printTaskDetails('11');
 
-function deleteTask(taskId: string | number): void {
+function deleteTask(taskId: string): void {
     const taskIndex = tasks.findIndex(task => task.id === taskId);
     if (taskIndex !== -1) {
         tasks.splice(taskIndex, 1);
@@ -92,20 +103,14 @@ console.log('getTasksByPriority(defaultPriority):', getTasksByPriority(DEFAULT_P
 
 function getTasksByCreatedAt(createdAt: Date): Task[] {
     return tasks.filter(task => {
-        if (typeof task.createdAt === 'string') {
-            return task.createdAt === createdAt.toISOString();
-        }
         return task.createdAt.toISOString() === createdAt.toISOString();
     });
 }
 console.log('getTasksByCreatedAt(2025-01-01):', getTasksByCreatedAt(new Date('2025-01-01'))); 
 
-function isTaskCompletedBeforeDeadline(taskId: string | number): boolean {
+function isTaskCompletedBeforeDeadline(taskId: string): boolean {
     const task = tasks.find(task => task.id === taskId);
     if (task) {
-        if (typeof task.deadline === 'string') {
-            return task.deadline === new Date().toISOString() && task.status === Status.DONE;
-        }       
         return task.deadline.toISOString() < new Date().toISOString() && task.status === Status.DONE;
     }
     console.log(`Task ${taskId} not found`);

@@ -3,7 +3,7 @@ import { Priority, Status, ITask } from "../../types";
 export class TaskService {
     constructor(private _tasks: ITask[]) {}
 
-    getTaskDetails(taskId: string | number) {
+    getTaskDetails(taskId: string) {
         return this._tasks.find(task => task.id === taskId).getTaskInfo();
     }
 
@@ -18,7 +18,7 @@ export class TaskService {
         this._tasks.push(task);
     }
 
-    updateTask(taskId: string | number, task: Partial<ITask>): void {
+    updateTask(taskId: string, task: Partial<ITask>): void {
         const taskIndex = this._tasks.findIndex(task => task.id === taskId);
         if (taskIndex !== -1) {
             this._tasks[taskIndex].updateTask(task);
@@ -27,7 +27,7 @@ export class TaskService {
         }
     }
 
-    deleteTask(taskId: string | number): void {
+    deleteTask(taskId: string): void {
         const taskIndex = this._tasks.findIndex(task => task.id === taskId);
         if (taskIndex !== -1) {
             this._tasks.splice(taskIndex, 1);
@@ -53,7 +53,7 @@ export class TaskService {
         });
     }
 
-    isTaskCompletedBeforeDeadline(taskId: string | number): boolean {
+    isTaskCompletedBeforeDeadline(taskId: string): boolean {
         const task = this._tasks.find(task => task.id === taskId);
         if (task) {
             if (typeof task.deadline === 'string') {

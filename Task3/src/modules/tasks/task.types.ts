@@ -1,7 +1,7 @@
 import { ITask, Status, Priority, TaskType } from "../../types";
 import { DEFAULT_STATUS, DEFAULT_PRIORITY } from "../../constants";
 
-const validateTask = (id: string, title: string, createdAt: string | Date, deadline: string | Date, status?: Status, priority?: Priority, type: TaskType = TaskType.TASK) => {
+const validateTask = (id: string, title: string, createdAt: Date, deadline: Date, status?: Status, priority?: Priority, type: TaskType = TaskType.TASK) => {
     if (!id || !title || !createdAt || !deadline) {
         throw new Error('Id, title, createdAt and deadline are required');
     }
