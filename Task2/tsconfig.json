@@ -7,7 +7,7 @@
     "lib": ["esnext", "dom"],
     "declaration": true,
     "declarationMap": true,
-    "noUncheckedIndexedAccess": true,
+    "noUncheckedIndexedAccess": false,
     "exactOptionalPropertyTypes": false,
     "strict": true,
     "verbatimModuleSyntax": false,

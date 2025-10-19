@@ -63,12 +63,12 @@ function updateTask(taskId: string, task: Partial<Task>): void {
     if (tasks[taskIndex]) {
         tasks[taskIndex] = {
             id: taskId,
-            title: task.title || tasks[taskIndex]!.title,
-            createdAt: tasks[taskIndex]!.createdAt,
-            deadline: task.deadline || tasks[taskIndex]!.deadline,
-            status: task.status || tasks[taskIndex]!.status,
-            priority: task.priority || tasks[taskIndex]!.priority,
-            description: task.description || tasks[taskIndex]!.description,
+            title: task.title || tasks[taskIndex].title,
+            createdAt: tasks[taskIndex].createdAt,
+            deadline: task.deadline || tasks[taskIndex].deadline,
+            status: task.status || tasks[taskIndex].status,
+            priority: task.priority || tasks[taskIndex].priority,
+            description: task.description || tasks[taskIndex].description,
         };
     } else {
         console.log(`Task ${taskId} not found`);
