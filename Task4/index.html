@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>task4</title>
+  </head>
+  <body>
+    <div id="app">
+      <div id="task-list"></div>
+      <form id="task-form">
+        <input type="text" id="task-title" name="title" placeholder="Title" required oninput="clearError(); clearSuccess();" />
+        <input type="text" id="task-description" name="description" placeholder="Description" oninput="clearError(); clearSuccess();" />
+        <input type="date" id="task-deadline" name="deadline" placeholder="Deadline" required oninput="clearError(); clearSuccess();" />
+        <select id="task-status" name="status" required oninput="clearError(); clearSuccess();">
+          <option value="todo" selected>Todo</option>
+          <option value="in_progress">In Progress</option>
+          <option value="done">Done</option>
+        </select>
+        <select id="task-priority" name="priority" required oninput="clearError(); clearSuccess();">
+          <option value="low">Low</option>
+          <option value="medium" selected>Medium</option>
+          <option value="high">High</option>
+        </select>
+        <button type="submit" class="create-btn">Create Task</button>
+      </form>
+      <div class="error-message">
+        <p id="error-message"></p>
+      </div>
+      <div class="success-message">
+        <p id="success-message"></p>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+    <script> 
+      function clearError() {
+        const errorMessage = document.getElementById('error-message')
+        if (errorMessage) {
+          errorMessage.textContent = ''
+        }
+      }
+      function clearSuccess() {
+        const successMessage = document.getElementById('success-message')
+        if (successMessage) {
+          successMessage.textContent = ''
+        }
+      }
+    </script>
+  </body>
+</html>
