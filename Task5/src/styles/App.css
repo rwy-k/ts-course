@@ -1,0 +1,184 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+.app {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  width: 100%;
+}
+.layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 2rem;
+  gap: 1rem;
+  align-items: center;
+}
+.layout h1 {
+  font-size: 5rem;
+  font-weight: 600;
+  margin: 0;
+}
+.layout nav {
+  display: flex;
+  gap: 1rem;
+}
+.layout nav button.active {
+  background-color: #646cff;
+  color: #fff;
+}
+.task-list {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+}
+.task-list th, .task-list td {
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+}
+.task-list button.delete-task-button {
+  background-color: red;
+  color: #fff;
+}
+.task-list button.update-task-button {
+  background-color: blue;
+  color: #fff;
+}
+.create-task-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.create-task-form label {
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+  text-align: left;
+  margin-block: 1rem 0.5rem;
+}
+.create-task-form input, .create-task-form select {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #f0f0f0;
+  color: #333;
+  transition: border-color 0.25s;
+}
+.create-task-form input:hover, .create-task-form select:hover {
+  border-color: #646cff;
+}
+.create-task-form input:focus, .create-task-form select:focus {
+  outline: none;
+  border-color: #646cff;
+}
+.create-task-form button:disabled {
+  background-color: #ccc;
+  color: #333;
+  cursor: not-allowed;
+}
+.create-task-form button {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc; 
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+  transition: border-color 0.25s;
+}
+.create-task-form button:hover {
+  background-color: green;
+  color: #fff;
+}
+
+.task-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.task-form label {
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+  text-align: left;
+  margin-block: 1rem 0.5rem;
+}
+.task-form input, .task-form select {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #f0f0f0;
+  color: #333;
+  transition: border-color 0.25s;
+}
+.task-form input:hover, .task-form select:hover {
+  border-color: #646cff;
+}
+.task-form input:focus, .task-form select:focus {
+  outline: none;
+  border-color: #646cff;
+}
+.task-form button {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+  font-weight: 500;
+  font-family: inherit;
+  transition: border-color 0.25s;
+}
+.task-form button:hover {
+  background-color: green;
+  color: #fff;
+}
+.task-form button:disabled {
+  background-color: #ccc;
+  color: #333;
+  cursor: not-allowed;
+}
+
+.toast-container {
+  position: fixed;
+  top: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #fff;
+  color: #333;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+.toast-container.success {
+  background-color: green;
+  color: #fff;
+}
+.toast-container.error {
+  background-color: red;
+  color: #fff;
+}
+
+.error {
+  color: red;
+  font-size: 0.8rem;
+  font-weight: 500;
+  font-family: inherit;
+  text-align: left;
+  margin-block: 0.5rem 0;
+}
+input.error, select.error {
+  border-color: red;
+  border-width: 2px;
+}
