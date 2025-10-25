@@ -1,5 +1,5 @@
-import { Priority, Status } from "./types";
+import { Priority, Status } from "./modules/tasks/task.types";
 
-export const DEFAULT_STATUS = Status.TODO as const;
-export const DEFAULT_PRIORITY = Priority.LOW as const;
-export const DEFAULT_DESCRIPTION = '' as const;
+export const DEFAULT_STATUS = Status.TODO;
+export const DEFAULT_PRIORITY = Priority.LOW;
+export const DEFAULT_DESCRIPTION = '';

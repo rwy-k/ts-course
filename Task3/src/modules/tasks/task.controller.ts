@@ -1,5 +1,5 @@
 import { TaskService } from "./task.service";
-import { Priority, Status, ITask } from "../../types";
+import { Priority, Status, ITask } from "./task.types";
 export class TaskController {
     constructor(private readonly taskService: TaskService) {}
 

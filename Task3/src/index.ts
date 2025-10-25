@@ -1,14 +1,18 @@
 import { TaskController } from "./modules/tasks/task.controller";
 import { TaskService } from "./modules/tasks/task.service";
-import { Task, Subtask, Bug, Story, Epic } from "./modules/tasks/task.types";
-import { Priority, Status } from "./types";
+import { Priority, Status, Severity } from "./modules/tasks/task.types";
+import { Task } from "./modules/tasks/task.model";
+import { Subtask } from "./modules/tasks/subtask.model";
+import { Bug } from "./modules/tasks/bug.model";
+import { Story } from "./modules/tasks/story.model";
+import { Epic } from "./modules/tasks/epic.model";
 
 const tasks: Task[] = [
     new Task('1', 'Task 1', new Date('2021-01-01'), new Date('2021-01-02')),
-    new Subtask('2', 'Subtask 1', new Date('2021-02-01'), new Date('2021-02-02')),
-    new Bug('3', 'Bug 1', new Date('2021-03-01'), new Date('2021-03-02')),
-    new Story('4', 'Story 1', new Date('2021-04-01'), new Date('2021-04-02')),
-    new Epic('5', 'Epic 1', new Date('2021-05-01'), new Date('2021-05-02')),
+    new Subtask('2', 'Subtask 1', new Date('2021-02-01'), new Date('2021-02-02'), Status.TODO, Priority.LOW, '1'),
+    new Bug('3', 'Bug 1', new Date('2021-03-01'), new Date('2021-03-02'), Status.TODO, Priority.LOW, Severity.LOW),
+    new Story('4', 'Story 1', new Date('2021-04-01'), new Date('2021-04-02'), Status.TODO, Priority.LOW, [new Subtask('2', 'Subtask 1', new Date('2021-02-01'), new Date('2021-02-02'), Status.TODO, Priority.LOW, '1')]),
+    new Epic('5', 'Epic 1', new Date('2021-05-01'), new Date('2021-05-02'), Status.TODO, Priority.LOW, [new Subtask('2', 'Subtask 1', new Date('2021-02-01'), new Date('2021-02-02'), Status.TODO, Priority.LOW, '1')]),
 ];
 const taskService = new TaskService(tasks);
 const taskController = new TaskController(taskService);

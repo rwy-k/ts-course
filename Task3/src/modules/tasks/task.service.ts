@@ -1,4 +1,4 @@
-import { Priority, Status, ITask } from "../../types";
+import { Priority, Status, ITask } from "./task.types";
 
 export class TaskService {
     constructor(private _tasks: ITask[]) {}
