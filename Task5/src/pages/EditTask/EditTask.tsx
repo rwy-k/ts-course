@@ -1,9 +1,10 @@
 import { useForm } from 'react-hook-form';
-import type { UpdateTaskDto, Task } from '@/types';
-import { taskSchema, type TaskFormData } from '@/helpers/validation';
+import type { Task } from '@/types';
+import { taskSchema } from '@/shared/helpers/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { formatDateForInput } from '@/helpers/formatFields';
-import { TaskForm } from '@/shared/TaskForm';
+import { formatDateForInput } from '@/shared/helpers/formatFields';
+import { TaskForm } from '@/shared/components/TaskForm';
+import type { TaskFormData } from '@/types';
 
 export function EditTask({ task, editTask }: { task: Task, editTask: (task: Task) => void }) {
     const { register, handleSubmit, formState: { errors, isDirty } } = useForm<TaskFormData>({
@@ -18,9 +19,13 @@ export function EditTask({ task, editTask }: { task: Task, editTask: (task: Task
         resolver: zodResolver(taskSchema),
     });
 
-    const onSubmit = (data: UpdateTaskDto) => {
+    const onSubmit = (data: TaskFormData) => {
         editTask({
-            ...data,
+            title: data.title,
+            description: data.description ?? '',
+            deadline: new Date(data.deadline),
+            status: data.status,
+            priority: data.priority,
             id: task.id,
             createdAt: task.createdAt,
         });

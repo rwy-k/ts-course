@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { CreateTaskForm } from './CreateTaskForm';
 import { type Task } from '@/types';
 import { TaskService } from '@/api/service';
-import { Toast } from '@/shared/Toast';
+import { Toast } from '@/shared/components/Toast';
 
 export function CreateTaskPage() {
     const [showToast, setShowToast] = useState(false);

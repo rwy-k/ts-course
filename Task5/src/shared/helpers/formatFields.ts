@@ -1,4 +1,4 @@
-import { Priority, Status } from "../types";
+import { Priority, Status } from "@/types";
 
 export const formatTime = (time: Date | string) => {
     if (typeof time === 'string') {

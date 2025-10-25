@@ -1,5 +1,5 @@
 import type { Task } from '@/types';
-import { formatPriority, formatStatus, formatTime } from '@/helpers/formatFields';
+import { formatPriority, formatStatus, formatTime } from '@/shared/helpers/formatFields';
 
 export function TasksList({ tasks, updateTask, deleteTask }: { tasks: Task[], updateTask: (taskId: string, task: Task) => void, deleteTask: (taskId: string) => void }) {
 

@@ -1,7 +1,7 @@
 import { Status, Priority } from '@/types';
 import type { TaskFormProps } from '@/types';
 
-export function TaskForm({ register, errors, buttonText, handleSubmit, isDisabled }: TaskFormProps): JSX.Element {
+export function TaskForm({ register, errors, buttonText, handleSubmit, isDisabled }: TaskFormProps) {
     return (
         <form className="task-form" onSubmit={handleSubmit}>
             <label htmlFor="title">Title</label>

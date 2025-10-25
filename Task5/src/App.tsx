@@ -3,7 +3,7 @@ import './styles/App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { CreateTaskPage } from './pages/CreateTask/CreateTaskPage'
 import { TaskListPage } from './pages/TaskList/TaskListPage';
-import { Layout } from './shared/Layout'
+import { Layout } from './shared/components/Layout'
 import { EditTaskPage } from './pages/EditTask/EditTaskPage'
 
 const router = createBrowserRouter([

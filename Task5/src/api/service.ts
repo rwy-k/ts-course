@@ -1,4 +1,4 @@
-import { API_URL } from '../constants';
+import { API_URL } from '../shared/constants';
 import type { Task } from '../types';
 import { Status, Priority } from '../types';
 export class TaskService {

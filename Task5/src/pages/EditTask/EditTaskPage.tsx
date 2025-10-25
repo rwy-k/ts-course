@@ -1,7 +1,7 @@
 import { EditTask } from './EditTask';
 import { TaskService } from '@/api/service';
 import { useEffect, useState } from 'react';
-import { Toast } from '@/shared/Toast';
+import { Toast } from '@/shared/components/Toast';
 import { useParams } from 'react-router-dom';
 import type { Task } from '@/types';
 

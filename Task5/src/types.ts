@@ -1,4 +1,5 @@
-import type { TaskFormData } from '@/helpers/validation';
+import { taskSchema } from '@/shared/helpers/validation';
+import { z } from 'zod';
 
 export type Task = {
     id: string;
@@ -29,3 +30,5 @@ export interface TaskFormProps {
     handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
     isDisabled: boolean;
 }
+
+export type TaskFormData = z.input<typeof taskSchema>;

@@ -2,7 +2,7 @@ import type { Task } from '@/types';
 import { TasksList } from "./TasksListComponent";
 import { TaskService } from '@/api/service';
 import { useState, useEffect } from "react";
-import { Toast } from '@/shared/Toast';
+import { Toast } from '@/shared/components/Toast';
 import { useNavigate } from "react-router-dom";
 
 export function TaskListPage() {
