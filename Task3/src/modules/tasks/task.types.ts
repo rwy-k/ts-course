@@ -45,10 +45,6 @@ export interface IBug extends ITask {
     severity: Severity;
 }
 
-export interface IStory extends ITask {
-    subtasks: ISubtask[];
-}
-
-export interface IEpic extends ITask {
+export interface IStoryOrEpic extends ITask {
     subtasks: ISubtask[];
 }
