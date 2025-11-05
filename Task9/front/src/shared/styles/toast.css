@@ -1,0 +1,35 @@
+.toast-container {
+    position: fixed;
+    top: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    color: #333;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+}
+.toast-container.success {
+    background-color: green;
+    color: #fff;
+}
+.toast-container.error {
+    background-color: red;
+    color: #fff;
+}
+.toast-container p {
+    margin: 0;
+}
+.toast-container button {
+    margin-top: 1rem;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: inherit;
+    transition: border-color 0.25s;
+    cursor: pointer;
+    background-color: #646cff;
+    color: #fff;
+}
