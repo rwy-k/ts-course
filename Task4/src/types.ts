@@ -19,3 +19,5 @@ export enum Priority {
     MEDIUM = 'medium',
     HIGH = 'high',
 }
+
+export type TaskToUpdate = Omit<Task, 'id' | 'createdAt'>;

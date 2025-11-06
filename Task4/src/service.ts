@@ -2,8 +2,8 @@ import { API_URL } from './constants';
 import type { Task } from './types';
 import { Status, Priority } from './types';
 export class TaskService {
-    private validateTask(task: Task): void {
-        if (!task.id) {
+    private validateTask(task: Task | TaskToUpdate, isUpdate: boolean = false): void {
+        if (!isUpdate && !task.id) {
             throw new Error('Id is required');
         }
         if (!task.title || !task.deadline || !task.status || !task.priority) {
@@ -50,11 +50,8 @@ export class TaskService {
         }
     }
 
-    async updateTask(id: string, task: Task): Promise<Task> {
-        this.validateTask(task);
-        if (task.id !== id) {
-            throw new Error('Id mismatch: ' + task.id + ' !== ' + id);
-        }
+    async updateTask(id: string, task: TaskToUpdate): Promise<Task> {
+        this.validateTask(task, true);
         try {   
             return fetch(`${API_URL}/tasks/${id}`, {
                 method: 'PUT',

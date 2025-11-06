@@ -57,25 +57,13 @@ const getTasks = () => {
 
 const createTask = (event: Event) => {
   event.preventDefault()
-  const title = document.getElementById('task-title') as HTMLInputElement
-  const description = document.getElementById('task-description') as HTMLInputElement
-  const deadline = document.getElementById('task-deadline') as HTMLInputElement
-  const status = document.getElementById('task-status') as HTMLSelectElement
-  const priority = document.getElementById('task-priority') as HTMLSelectElement
-  
-  const task = {
-    title: title.value,
-    description: description.value,
-    deadline: new Date(deadline.value),
-    status: status.value as Status,
-    priority: priority.value as Priority,
-    createdAt: new Date(),
-    id: uuidv4(),
-  }
+  const data = new FormData(event.target as HTMLFormElement)
+  const task = Object.fromEntries(data) as Task
 
-  taskService.createTask(task)
+  taskService.createTask({...task, id: uuidv4(), createdAt: new Date()})
     .then(() => {
       getTasks()
+    }).then(() => {
       document.getElementById('success-message')!.textContent = 'Task created successfully!'
     })
     .catch((error) => {
@@ -90,6 +78,7 @@ const deleteTask = (event: Event) => {
   if (taskIdValue) {
     taskService.deleteTaskById(taskIdValue).then(() => {
       getTasks();
+    }).then(() => {
       document.getElementById('success-message')!.textContent = 'Task deleted successfully!'
     }).catch((error) => {
       console.error('Error deleting task', error)
@@ -116,22 +105,22 @@ const editTask = (event: Event) => {
       console.error('Could not find all task fields')
       return
     }
-    
+
     const task = {
       title: title.value,
       description: description.value,
       deadline: new Date(deadline.value),
       status: status.value as Status,
       priority: priority.value as Priority,
-      id: taskIdValue,
-      createdAt: new Date(),
     }
 
     taskService.updateTask(taskIdValue, task)
       .then(() => {
         console.log('Task updated successfully')
-        document.getElementById('success-message')!.textContent = 'Task updated successfully!'
         getTasks()
+      })
+      .then(() => {
+        document.getElementById('success-message')!.textContent = 'Task updated successfully!'
       })
       .catch((error) => {
         console.error('Error editing task', error)
