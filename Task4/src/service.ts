@@ -1,10 +1,10 @@
 import { API_URL } from './constants';
-import type { Task } from './types';
+import type { Task, TaskToUpdate } from './types';
 import { Status, Priority } from './types';
 export class TaskService {
     private validateTask(task: Task | TaskToUpdate, isUpdate: boolean = false): void {
-        if (!isUpdate && !task.id) {
-            throw new Error('Id is required');
+        if (!isUpdate && !('id' in task)) {
+            throw new Error('Task id is required');
         }
         if (!task.title || !task.deadline || !task.status || !task.priority) {
             throw new Error('Title, deadline, status and priority are required');
