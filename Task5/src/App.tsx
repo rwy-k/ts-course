@@ -3,8 +3,9 @@ import './styles/App.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { CreateTaskPage } from './pages/CreateTask/CreateTaskPage'
 import { TaskListPage } from './pages/TaskList/TaskListPage';
-import { Layout } from './shared/components/Layout'
-import { EditTaskPage } from './pages/EditTask/EditTaskPage'
+import { Layout } from './shared/components/Layout';
+import { EditTaskPage } from './pages/EditTask/EditTaskPage';
+import { Outlet } from 'react-router-dom';
 
 const router = createBrowserRouter([
   {
@@ -12,27 +13,23 @@ const router = createBrowserRouter([
     element: (
       <>
         <Layout />
-        <TaskListPage />
+        <Outlet />
       </>
     ),
-  },
-  {
-    path: '/create-task',
-    element: (
-      <>
-        <Layout />
-        <CreateTaskPage />
-      </>
-    ),
-  },
-  {
-    path: '/edit-task/:id',
-    element: (
-      <>
-        <Layout />
-        <EditTaskPage />
-      </>
-    ),
+    children: [
+      {
+        path: '',
+        element: <TaskListPage />,
+      },
+      {
+        path: 'create-task',
+        element: <CreateTaskPage />,
+      },
+      {
+        path: 'edit-task/:id',
+        element: <EditTaskPage />,
+      },
+    ],
   },
 ]);
 

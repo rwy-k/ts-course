@@ -1,28 +1,29 @@
 import { EditTask } from './EditTask';
 import { TaskService } from '@/api/service';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { Toast } from '@/shared/components/Toast';
 import { useParams } from 'react-router-dom';
-import type { Task } from '@/types';
+import { type Task, ToastType } from '@/types';
 
 export function EditTaskPage() {
     const { id } = useParams();
     const [task, setTask] = useState<Task | null>(null);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-    const [toastType, setToastType] = useState<'success' | 'error'>('success');
+    const [toastType, setToastType] = useState<ToastType>(ToastType.SUCCESS);
+
+    const taskService = useMemo(() => new TaskService(), []);
 
     const editTask = async (task: Task) => {
         try {
-            const taskService = new TaskService();
             await taskService.updateTask(id!, task);
             setToastMessage('Task updated successfully');
-            setToastType('success')
+            setToastType(ToastType.SUCCESS);
             setShowToast(true);
         } catch (error) {
             console.error(error);
             setToastMessage('Failed to update task');
-            setToastType('error')
+            setToastType(ToastType.ERROR);
             setShowToast(true);
         } finally {
             setTimeout(() => {
@@ -33,11 +34,10 @@ export function EditTaskPage() {
 
     useEffect(() => {
         if (!id) return;
-        const taskService = new TaskService();
         taskService.getTaskById(id).then((task) => {
             setTask(task);
         });
-    }, [id]);
+    }, [id, taskService]);
     
     return (
         <>

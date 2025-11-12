@@ -8,7 +8,7 @@ import { Status, Priority } from '@/types';
 import type { TaskFormData } from '@/types';
 
 export function CreateTaskForm({ createTask }: { createTask: (task: Task) => void }) {
-    const { register, handleSubmit, formState: { errors, isDirty }, reset } = useForm<TaskFormData>({
+    const { register, handleSubmit, formState: { errors, isDirty, isValid }, reset } = useForm<TaskFormData>({
         mode: 'onBlur',
         resolver: zodResolver(taskSchema),
         defaultValues: {
@@ -33,7 +33,7 @@ export function CreateTaskForm({ createTask }: { createTask: (task: Task) => voi
         reset();
     }
 
-    const isDisabled = Object.keys(errors).length > 0 || !isDirty;
+    const isDisabled = !isDirty || !isValid;
     
     return (
         <TaskForm 

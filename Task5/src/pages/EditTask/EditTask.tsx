@@ -7,7 +7,7 @@ import { TaskForm } from '@/shared/components/TaskForm';
 import type { TaskFormData } from '@/types';
 
 export function EditTask({ task, editTask }: { task: Task, editTask: (task: Task) => void }) {
-    const { register, handleSubmit, formState: { errors, isDirty } } = useForm<TaskFormData>({
+    const { register, handleSubmit, formState: { errors, isDirty, isValid } } = useForm<TaskFormData>({
         mode: 'onBlur',
         defaultValues: {
             title: task.title,
@@ -31,7 +31,7 @@ export function EditTask({ task, editTask }: { task: Task, editTask: (task: Task
         });
     }
 
-    const isDisabled = Object.keys(errors).length > 0 || !isDirty;
+    const isDisabled = !isDirty || !isValid;
 
     return (
         <TaskForm 

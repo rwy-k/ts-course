@@ -1,4 +1,6 @@
-export function Toast({ message, type, show, setShow }: { message: string, type: 'success' | 'error', show: boolean, setShow: (show: boolean) => void }) {
+import type { ToastProps } from '@/types';
+
+export function Toast({ message, type, show, setShow }: ToastProps) {
     return (
     show && (
             <div className={`toast-container toast-${type}`}>
