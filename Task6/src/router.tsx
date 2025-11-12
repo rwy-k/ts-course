@@ -5,21 +5,22 @@ import { CreateTaskPage } from '@/features/tasks/pages/CreateTaskPage';
 import { UpdateTaskPage } from '@/features/tasks/pages/UpdateTaskPage';
 import { TaskService } from '@/features/tasks/api';
 
+const taskService = new TaskService();
 export const router = createBrowserRouter([
     {
         path: '/',
-        element: <TasksListPage taskService={new TaskService()} />,
+        element: <TasksListPage taskService={taskService} />,
     },
     {
         path: '/tasks/:id',
-        element: <TaskDetailsPage taskService={new TaskService()} />,
+        element: <TaskDetailsPage taskService={taskService} />,
     },
     {
         path: '/tasks/create',
-        element: <CreateTaskPage taskService={new TaskService()} />,
+        element: <CreateTaskPage taskService={taskService} />,
     },
     {
         path: '/tasks/update/:id',
-        element: <UpdateTaskPage taskService={new TaskService()} />,
+        element: <UpdateTaskPage taskService={taskService} />,
     },
 ]);
