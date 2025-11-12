@@ -7,24 +7,25 @@ import type { Task } from '@/features/tasks/types';
 import { useNavigate } from 'react-router-dom';
 import { Toast } from '@/shared/components/Toast';
 import { EmptyState } from '@/shared/components/EmptyState';
+import { ToastType } from '@/shared/types';
 
 export function TaskDetailsPage({ taskService }: { taskService: TaskService }) {
     const { id } = useParams();
     const [task, setTask] = useState<Task | null>(null);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-    const [toastType, setToastType] = useState<'success' | 'error'>('success');
+    const [toastType, setToastType] = useState<ToastType>(ToastType.SUCCESS);
     const navigate = useNavigate();
     const deleteTask = async (id: string) => {
         try {
             await taskService.deleteTaskById(id);
             setToastMessage('Task deleted successfully');
-            setToastType('success');
+            setToastType(ToastType.SUCCESS);
             setShowToast(true);
         } catch (error) {
             console.error(error);
             setToastMessage('Failed to delete task');
-            setToastType('error');
+            setToastType(ToastType.ERROR);
             setShowToast(true);
         } finally {
             setTimeout(() => {

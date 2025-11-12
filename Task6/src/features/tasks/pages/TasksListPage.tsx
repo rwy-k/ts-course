@@ -12,14 +12,14 @@ export function TasksListPage({ taskService }: { taskService: TaskService }) {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-    const [toastType, setToastType] = useState<ToastType>('success');
+    const [toastType, setToastType] = useState<ToastType>(ToastType.SUCCESS);
     useEffect(() => {
         taskService.getTasks().then((tasks) => {
             setTasks(tasks);
         }).catch((error) => {
             console.error(error);
             setToastMessage('Failed to get tasks');
-            setToastType('error');
+            setToastType(ToastType.ERROR);
             setShowToast(true);
         }).finally(() => {
             setTimeout(() => {

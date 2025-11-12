@@ -3,6 +3,7 @@ import { TaskForm } from "../components/TaskForm";
 import { useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { type TaskFormData, Status, Priority } from "../types";
+import { ToastType } from '@/shared/types';
 import { taskSchema } from "@/shared/helpers/validation";
 import { Toast } from '@/shared/components/Toast';
 import type { TaskService } from "../api";
@@ -15,7 +16,7 @@ export function CreateTaskPage({ taskService }: { taskService: TaskService }) {
     
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-    const [toastType, setToastType] = useState<'success' | 'error'>('success');
+    const [toastType, setToastType] = useState<ToastType>(ToastType.SUCCESS);
 
     const { register, handleSubmit, formState: { errors, isDirty }, reset } = useForm<TaskFormData>({
         mode: 'onBlur',
@@ -39,13 +40,13 @@ export function CreateTaskPage({ taskService }: { taskService: TaskService }) {
                 id: uuidv4(),
             });
             setToastMessage('Task created successfully');
-            setToastType('success');
+            setToastType(ToastType.SUCCESS);
             setShowToast(true);
             reset();
         } catch (error) {
             console.error(error);
             setToastMessage('Failed to create task');
-            setToastType('error');
+            setToastType(ToastType.ERROR);
             setShowToast(true);
         } finally {
             setTimeout(() => {

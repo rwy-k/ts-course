@@ -1,4 +1,7 @@
-export type ToastType = 'success' | 'error';
+export enum ToastType {
+    SUCCESS = 'success',
+    ERROR = 'error'
+}
 export interface ToastProps {
     message: string;
     type: ToastType;

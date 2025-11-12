@@ -11,13 +11,14 @@ import { taskSchema } from '@/shared/helpers/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { formatDateForInput } from '@/shared/helpers/formatFields';
+import { ToastType } from '@/shared/types';
 
 export function UpdateTaskPage({ taskService }: { taskService: TaskService }) {
     const { id } = useParams();
     const [task, setTask] = useState<Task | null>(null);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
-    const [toastType, setToastType] = useState<'success' | 'error'>('success');
+    const [toastType, setToastType] = useState<ToastType>(ToastType.SUCCESS);
     const navigate = useNavigate();
     const { register, handleSubmit, formState: { errors, isDirty }, setValue } = useForm<TaskFormData>({
         mode: 'onBlur',
@@ -34,7 +35,7 @@ export function UpdateTaskPage({ taskService }: { taskService: TaskService }) {
             setValue('status', task.status);
             setValue('priority', task.priority);
         });
-    }, [id, setValue]);
+    }, [id, setValue, taskService]);
 
     const onSubmit = async (data: TaskFormData) => {
         try {
@@ -44,12 +45,12 @@ export function UpdateTaskPage({ taskService }: { taskService: TaskService }) {
                 deadline: new Date(data.deadline),
             });
             setToastMessage('Task updated successfully');
-            setToastType('success');
+            setToastType(ToastType.SUCCESS);
             setShowToast(true);
         } catch (error) {
             console.error(error);
             setToastMessage('Failed to update task');
-            setToastType('error');
+            setToastType(ToastType.ERROR);
             setShowToast(true);
         } finally {
             setTimeout(() => {
