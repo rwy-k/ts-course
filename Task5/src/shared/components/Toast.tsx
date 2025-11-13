@@ -1,4 +1,10 @@
-import type { ToastProps } from '@/types';
+import { ToastType } from '@/types';
+interface ToastProps {
+    message: string;
+    type: ToastType;
+    show: boolean;
+    setShow: (show: boolean) => void;
+}
 
 export function Toast({ message, type, show, setShow }: ToastProps) {
     return (

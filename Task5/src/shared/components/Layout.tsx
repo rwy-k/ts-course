@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 
 export function Layout() {
     return (
@@ -12,6 +12,7 @@ export function Layout() {
             <button type="button" className={location.pathname === '/create-task' ? 'active' : ''}>Create Task</button>
           </Link>
         </nav>
+        <Outlet />
       </div>
     )
   }

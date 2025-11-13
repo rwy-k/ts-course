@@ -1,7 +1,12 @@
 import type { Task } from '@/types';
 import { formatPriority, formatStatus, formatTime } from '@/shared/helpers/formatFields';
+interface TasksListProps {
+    tasks: Task[];
+    updateTask: (taskId: string, task: Task) => void;
+    deleteTask: (taskId: string) => void;
+}
 
-export function TasksList({ tasks, updateTask, deleteTask }: { tasks: Task[], updateTask: (taskId: string, task: Task) => void, deleteTask: (taskId: string) => void }) {
+export function TasksList({ tasks, updateTask, deleteTask }: TasksListProps) {
 
     return (
         <table className="task-list">

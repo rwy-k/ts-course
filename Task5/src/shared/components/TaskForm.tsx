@@ -1,5 +1,19 @@
 import { Status, Priority } from '@/types';
 import type { TaskFormProps } from '@/types';
+import { z } from 'zod';
+import { taskSchema } from '@/shared/helpers/validation';
+
+type FormErrors = Partial<Record<keyof TaskFormData, { message?: string }>>;
+
+interface TaskFormProps {
+    register: (name: keyof TaskFormData, options?: object) => object;
+    errors: FormErrors;
+    buttonText: string;
+    handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
+    isDisabled: boolean;
+}
+
+type TaskFormData = z.input<typeof taskSchema>;
 
 export function TaskForm({ register, errors, buttonText, handleSubmit, isDisabled }: TaskFormProps) {
     return (

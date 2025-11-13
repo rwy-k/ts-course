@@ -1,6 +1,3 @@
-import { taskSchema } from '@/shared/helpers/validation';
-import { z } from 'zod';
-
 export type Task = {
     id: string;
     title: string;
@@ -21,25 +18,7 @@ export enum Priority {
     HIGH = 'high'
 }
 
-type FormErrors = Partial<Record<keyof TaskFormData, { message?: string }>>;
-
-export interface TaskFormProps {
-    register: (name: keyof TaskFormData, options?: object) => object;
-    errors: FormErrors;
-    buttonText: string;
-    handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
-    isDisabled: boolean;
-}
-
-export type TaskFormData = z.input<typeof taskSchema>;
-
 export enum ToastType {
     SUCCESS = 'success',
     ERROR = 'error'
-}
-export interface ToastProps {
-    message: string;
-    type: ToastType;
-    show: boolean;
-    setShow: (show: boolean) => void;
 }

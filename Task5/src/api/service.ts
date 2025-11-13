@@ -1,7 +1,7 @@
 import { API_URL } from '../shared/constants';
 import type { Task } from '../types';
 import { Status, Priority } from '../types';
-export class TaskService {
+class TaskService {
     private validateTask(task: Task): void {
         if (!task.id) {
             throw new Error('Id is required');
@@ -77,3 +77,5 @@ export class TaskService {
         }
     }
 }
+
+export default new TaskService();

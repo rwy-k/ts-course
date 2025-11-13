@@ -5,9 +5,13 @@ import { taskSchema } from '@/shared/helpers/validation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { TaskForm } from '@/shared/components/TaskForm';
 import { Status, Priority } from '@/types';
-import type { TaskFormData } from '@/types';
+import { z } from 'zod';
 
-export function CreateTaskForm({ createTask }: { createTask: (task: Task) => void }) {
+type TaskFormData = z.input<typeof taskSchema>;
+export interface CreateTaskProps {
+    createTask: (task: Task) => void;
+}
+export function CreateTaskForm({ createTask }: CreateTaskProps) {
     const { register, handleSubmit, formState: { errors, isDirty, isValid }, reset } = useForm<TaskFormData>({
         mode: 'onBlur',
         resolver: zodResolver(taskSchema),

@@ -5,16 +5,12 @@ import { CreateTaskPage } from './pages/CreateTask/CreateTaskPage'
 import { TaskListPage } from './pages/TaskList/TaskListPage';
 import { Layout } from './shared/components/Layout';
 import { EditTaskPage } from './pages/EditTask/EditTaskPage';
-import { Outlet } from 'react-router-dom';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <>
-        <Layout />
-        <Outlet />
-      </>
+      <Layout />
     ),
     children: [
       {

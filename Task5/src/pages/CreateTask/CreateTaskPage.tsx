@@ -1,15 +1,13 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { CreateTaskForm } from './CreateTaskForm';
 import { type Task, ToastType } from '@/types';
-import { TaskService } from '@/api/service';
+import taskService from '@/api/service';
 import { Toast } from '@/shared/components/Toast';
 
 export function CreateTaskPage() {
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [toastType, setToastType] = useState<ToastType>(ToastType.SUCCESS);
-
-    const taskService = useMemo(() => new TaskService(), []);
 
     const createTask = async (task: Task) => {
         try {

@@ -1,6 +1,6 @@
 import { EditTask } from './EditTask';
-import { TaskService } from '@/api/service';
-import { useEffect, useState, useMemo } from 'react';
+import taskService from '@/api/service';
+import { useEffect, useState } from 'react';
 import { Toast } from '@/shared/components/Toast';
 import { useParams } from 'react-router-dom';
 import { type Task, ToastType } from '@/types';
@@ -11,8 +11,6 @@ export function EditTaskPage() {
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [toastType, setToastType] = useState<ToastType>(ToastType.SUCCESS);
-
-    const taskService = useMemo(() => new TaskService(), []);
 
     const editTask = async (task: Task) => {
         try {
@@ -37,7 +35,7 @@ export function EditTaskPage() {
         taskService.getTaskById(id).then((task) => {
             setTask(task);
         });
-    }, [id, taskService]);
+    }, [id]);
     
     return (
         <>

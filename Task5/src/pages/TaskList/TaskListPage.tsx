@@ -1,7 +1,7 @@
 import { type Task, ToastType } from '@/types';
 import { TasksList } from "./TasksListComponent";
-import { TaskService } from '@/api/service';
-import { useState, useEffect, useMemo } from "react";
+import taskService from '@/api/service';
+import { useState, useEffect } from "react";
 import { Toast } from '@/shared/components/Toast';
 import { useNavigate } from "react-router-dom";
 
@@ -11,8 +11,6 @@ export function TaskListPage() {
     const [toastMessage, setToastMessage] = useState('');
     const [toastType, setToastType] = useState<ToastType>(ToastType.SUCCESS);
     
-    const taskService = useMemo(() => new TaskService(), []);
-
     const navigate = useNavigate();
     const updateTask = (taskId: string) => {
         navigate(`/edit-task/${taskId}`);
@@ -39,7 +37,7 @@ export function TaskListPage() {
         taskService.getTasks().then((tasks: Task[]) => {
             setTasks(tasks);
         });
-    }, [taskService]);
+    }, []);
     return (
         <>
             <TasksList tasks={tasks} updateTask={updateTask} deleteTask={deleteTask} />
