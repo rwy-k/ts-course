@@ -3,7 +3,7 @@
     {
       "title": "Task 4",
       "description": "Description 4",
-      "deadline": "2025-11-05T00:00:00.000Z",
+      "deadline": "2025-11-15T00:00:00.000Z",
       "status": "in_progress",
       "priority": "low",
       "id": "4",
@@ -85,15 +85,6 @@
       "priority": "medium",
       "id": "65e3a33f-81df-4333-b29f-f50da113981c",
       "createdAt": "2025-10-24T11:52:15.925Z"
-    },
-    {
-      "title": "Task",
-      "description": "Description",
-      "deadline": "2025-11-16T00:00:00.000Z",
-      "status": "todo",
-      "priority": "low",
-      "id": "a4c1f5c7-fd48-4ce0-b784-3d393f25abd5",
-      "createdAt": "2025-11-13T22:09:59.569Z"
     }
   ]
 }

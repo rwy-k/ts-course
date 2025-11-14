@@ -1,23 +1,31 @@
 import { Status, Priority } from '@/types';
-import type { TaskFormProps } from '@/types';
-import { z } from 'zod';
+import type { TaskFormData } from '@/shared/helpers/validation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { taskSchema } from '@/shared/helpers/validation';
-
-type FormErrors = Partial<Record<keyof TaskFormData, { message?: string }>>;
-
 interface TaskFormProps {
-    register: (name: keyof TaskFormData, options?: object) => object;
-    errors: FormErrors;
     buttonText: string;
-    handleSubmit: (e?: React.BaseSyntheticEvent) => Promise<void>;
-    isDisabled: boolean;
+    onSubmit: (data: TaskFormData) => void;
+    defaultValues: TaskFormData;
+    isEdit: boolean;
 }
 
-type TaskFormData = z.input<typeof taskSchema>;
+export function TaskForm({ buttonText, onSubmit, defaultValues, isEdit = false }: TaskFormProps) {
+    const { register, handleSubmit, formState: { errors, isDirty, isValid }, reset } = useForm<TaskFormData>({
+        mode: 'onBlur',
+        resolver: zodResolver(taskSchema),
+        defaultValues,
+    });
+    const onFormSubmit = (data: TaskFormData) => {
+        onSubmit(data);
+        if (!isEdit) {
+            reset();
+        }
+    }
+    const isDisabled = !isDirty || !isValid;
 
-export function TaskForm({ register, errors, buttonText, handleSubmit, isDisabled }: TaskFormProps) {
     return (
-        <form className="task-form" onSubmit={handleSubmit}>
+        <form className="task-form" onSubmit={handleSubmit(onFormSubmit)}>
             <label htmlFor="title">Title</label>
             <input id="title" placeholder="Title" className={errors.title ? 'error' : ''} {...register('title', { required: true })} />
             {errors.title && <p className="error">{errors.title.message}</p>}

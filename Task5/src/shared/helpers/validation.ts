@@ -11,6 +11,8 @@ export const taskSchema = z.object({
   priority: z.enum([Priority.LOW, Priority.MEDIUM, Priority.HIGH]),
 });
 
+export type TaskFormData = z.input<typeof taskSchema>;
+
 export const validateDeadline = (deadline: Date | string): boolean => {
     if (typeof deadline === 'string') {
         deadline = new Date(deadline);

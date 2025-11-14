@@ -1,29 +1,14 @@
-import { useForm } from 'react-hook-form';
 import type { Task } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
-import { taskSchema } from '@/shared/helpers/validation';
-import { zodResolver } from '@hookform/resolvers/zod';
+import type { TaskFormData } from '@/shared/helpers/validation';
 import { TaskForm } from '@/shared/components/TaskForm';
 import { Status, Priority } from '@/types';
-import { z } from 'zod';
 
-type TaskFormData = z.input<typeof taskSchema>;
 export interface CreateTaskProps {
     createTask: (task: Task) => void;
 }
-export function CreateTaskForm({ createTask }: CreateTaskProps) {
-    const { register, handleSubmit, formState: { errors, isDirty, isValid }, reset } = useForm<TaskFormData>({
-        mode: 'onBlur',
-        resolver: zodResolver(taskSchema),
-        defaultValues: {
-            title: '',
-            description: '',
-            deadline: '',
-            status: Status.TODO,
-            priority: Priority.LOW,
-        },
-    });
 
+export function CreateTaskForm({ createTask }: CreateTaskProps) {
     const onSubmit = (data: TaskFormData) => {
         createTask({
             title: data.title,
@@ -34,18 +19,19 @@ export function CreateTaskForm({ createTask }: CreateTaskProps) {
             id: uuidv4(),
             createdAt: new Date(),
         });
-        reset();
     }
-
-    const isDisabled = !isDirty || !isValid;
     
     return (
         <TaskForm 
-            register={register} 
-            errors={errors} 
             buttonText="Create Task" 
-            handleSubmit={handleSubmit(onSubmit)} 
-            isDisabled={isDisabled} 
+            onSubmit={onSubmit} 
+            defaultValues={{
+                title: '',
+                description: '',
+                deadline: '',
+                status: Status.TODO,
+                priority: Priority.LOW,
+            }}
         />
     )
 }
