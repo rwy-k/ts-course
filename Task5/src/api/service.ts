@@ -2,8 +2,8 @@ import { API_URL } from '../shared/constants';
 import type { Task } from '../types';
 import { Status, Priority } from '../types';
 class TaskService {
-    private validateTask(task: Task, isUpdate: boolean = false): void {
-        if (!isUpdate && !task.id) {
+    private validateTask(task: Task): void {
+        if (!task.id) {
             throw new Error('Id is required');
         }
         if (!task.title || !task.deadline || !task.status || !task.priority) {
@@ -50,10 +50,10 @@ class TaskService {
         }
     }
 
-    async updateTask(id: string, task: Task): Promise<Task> {
-        this.validateTask(task, true);
+    async updateTask(task: Task): Promise<Task> {
+        this.validateTask(task);
         try {   
-            return fetch(`${API_URL}/tasks/${id}`, {
+            return fetch(`${API_URL}/tasks/${task.id}`, {
                 method: 'PUT',
                 body: JSON.stringify(task),
             }).then(res => res.json());

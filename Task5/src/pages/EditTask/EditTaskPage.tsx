@@ -14,7 +14,7 @@ export function EditTaskPage() {
 
     const editTask = async (task: Task) => {
         try {
-            await taskService.updateTask(id!, task);
+            await taskService.updateTask(task);
             setToastMessage('Task updated successfully');
             setToastType(ToastType.SUCCESS);
             setShowToast(true);

@@ -7,7 +7,7 @@ interface TaskFormProps {
     buttonText: string;
     onSubmit: (data: TaskFormData) => void;
     defaultValues: TaskFormData;
-    isEdit: boolean;
+    isEdit?: boolean;
 }
 
 export function TaskForm({ buttonText, onSubmit, defaultValues, isEdit = false }: TaskFormProps) {

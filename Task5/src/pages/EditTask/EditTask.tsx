@@ -4,12 +4,13 @@ import { formatDateForInput } from '@/shared/helpers/formatFields';
 import { TaskForm } from '@/shared/components/TaskForm';
 interface EditTaskProps {
     task: Task;
-    editTask: (task: Omit<Task, 'id'>) => void;
+    editTask: (task: Task) => void;
 }
 
 export function EditTask({ task, editTask }: EditTaskProps) {
     const onSubmit = (data: TaskFormData) => {
         editTask({
+            id: task.id,
             description: data.description ?? '',
             deadline: new Date(data.deadline),
             status: data.status,
