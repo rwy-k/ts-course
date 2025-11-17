@@ -29,27 +29,18 @@ export class TaskService {
     }
 
     async getTaskById(id: string) {
-        // Validate UUID format
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-        if (!uuidRegex.test(id)) {
-            throw new CustomError('Invalid task ID format', 400);
-        }
-        
         const task = await this.taskModel.findByPk(id);
+        if (!task) {
+            throw new CustomError('Task not found', 404);
+        }
         return task;
     }
 
-    async createTask(task: Partial<ITask>) {
+    async createTask(task: Omit<ITask, 'id' | 'createdAt'>) {
         return await this.taskModel.create(task);
     }
 
     async deleteTask(id: string) {
-        // Validate UUID format
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-        if (!uuidRegex.test(id)) {
-            throw new CustomError('Invalid task ID format', 400);
-        }
-        
         const task = await this.taskModel.findByPk(id);
         if (!task) {
             throw new CustomError('Task not found', 404);
@@ -58,16 +49,13 @@ export class TaskService {
     }
 
     async updateTask(id: string, newTask: ITaskUpdate) {
-        // Validate UUID format
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-        if (!uuidRegex.test(id)) {
-            throw new CustomError('Invalid task ID format', 400);
-        }
-        
         const task = await this.taskModel.findByPk(id);
         if (!task) {
-            return await this.taskModel.create({ ...newTask, id, createdAt: new Date() });
+            throw new CustomError('Task not found', 404);
         } else {
+            if (newTask.deadline && new Date(newTask.deadline) < new Date(task.createdAt)) {
+                throw new CustomError('Deadline must be after creation date', 400);
+            }
             await this.taskModel.update({ ...newTask }, { where: { id } });
             const updatedTask = await this.taskModel.findByPk(id);
             return updatedTask;
