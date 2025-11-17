@@ -9,13 +9,7 @@ export interface ITask {
     type: TaskType;
 }
 
-export interface ITaskUpdate extends Partial<ITask> {
-    deadline: Date;
-    status: Status;
-    priority: Priority;
-    type: TaskType;
-    title: string;
-}
+export type ITaskUpdate = Omit<ITask, 'id' | 'createdAt'>;
 
 export interface ITaskFilter {
     status?: Status;

@@ -34,17 +34,17 @@ export class TaskService {
     }
 
     createTask(task: ITask) {
-        if (task.id && this.tasks.find(t => t.id === task.id)) {
-            throw new CustomError('Task already exists', 400);
+        if (new Date(task.deadline) < new Date()) {
+            throw new CustomError('Deadline must be in the future', 400);
         }
-        if (!task.id) {
-            task.id = uuidv4();
-        }
-        if (!task.createdAt) {
-            task.createdAt = new Date();
-        }
-        this.tasks.push(task);
-        return task;
+        
+        const newTask = {
+            ...task,
+            id: uuidv4(),
+            createdAt: new Date(),
+        };
+        this.tasks.push(newTask);
+        return newTask;
     }
 
     deleteTask(id: string) {
@@ -59,8 +59,11 @@ export class TaskService {
     updateTask(id: string, newTask: ITaskUpdate) {
         const task = this.tasks.find(task => task.id === id);
         if (!task) {
-            return this.createTask({ ...newTask, id, createdAt: new Date() });
+            throw new CustomError('Task not found', 404);
         } else {
+            if (newTask.deadline && new Date(newTask.deadline) < new Date(task.createdAt)) {
+                throw new CustomError('Deadline must be after creation date', 400);
+            }
             this.tasks = this.tasks.map(task => task.id === id ? { ...task, ...newTask } : task);
         }
         return this.getTaskById(id);

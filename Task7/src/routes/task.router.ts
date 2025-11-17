@@ -9,14 +9,14 @@ const router = Router();
 const taskService = new TaskService();
 const taskController = new TaskController(taskService);
 
-router.get('/', queryParamsValidatorGetAll, taskController.getTasks.bind(taskController));
+router.get('/', queryParamsValidatorGetAll, taskController.getTasks);
 
-router.get('/:id', queryParamsValidatorGetById, taskController.getTaskById.bind(taskController));
+router.get('/:id', queryParamsValidatorGetById, taskController.getTaskById);
 
-router.post('/', requestBodyValidator, taskController.createTask.bind(taskController));
+router.post('/', requestBodyValidator, taskController.createTask);
 
-router.delete('/:id', taskController.deleteTask.bind(taskController));
+router.delete('/:id', taskController.deleteTask);
 
-router.put('/:id', requestBodyValidator, taskController.updateTask.bind(taskController));
+router.put('/:id', requestBodyValidator, taskController.updateTask);
 
 export default router;

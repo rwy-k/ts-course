@@ -10,7 +10,7 @@ const queryParamsFiltersSchema = z.object({
 });
 
 const queryParamsIdSchema = z.object({
-    id: z.string().uuid({ version: 'v4', message: 'Invalid UUID' }),
+    id: z.uuid({ version: 'v4', message: 'Invalid UUID' }),
 });
 
 export const queryParamsValidatorGetAll = (req: Request, res: Response, next: NextFunction) => {
