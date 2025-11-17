@@ -9,7 +9,10 @@ import { Toast } from '@/shared/components/Toast';
 import { EmptyState } from '@/shared/components/EmptyState';
 import { ToastType } from '@/shared/types';
 
-export function TaskDetailsPage({ taskService }: { taskService: TaskService }) {
+interface TaskDetailsPageProps {
+    taskService: TaskService;
+}
+export function TaskDetailsPage({ taskService }: TaskDetailsPageProps) {
     const { id } = useParams();
     const [task, setTask] = useState<Task | null>(null);
     const [showToast, setShowToast] = useState(false);
@@ -22,6 +25,9 @@ export function TaskDetailsPage({ taskService }: { taskService: TaskService }) {
             setToastMessage('Task deleted successfully');
             setToastType(ToastType.SUCCESS);
             setShowToast(true);
+            setTimeout(() => {
+                navigate('/');
+            }, 1000);
         } catch (error) {
             console.error(error);
             setToastMessage('Failed to delete task');

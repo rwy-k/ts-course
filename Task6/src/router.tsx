@@ -3,9 +3,8 @@ import { TasksListPage } from './features/tasks/pages/TasksListPage';
 import { TaskDetailsPage } from '@/features/tasks/pages/TaskDetailsPage';
 import { CreateTaskPage } from '@/features/tasks/pages/CreateTaskPage';
 import { UpdateTaskPage } from '@/features/tasks/pages/UpdateTaskPage';
-import { TaskService } from '@/features/tasks/api';
+import taskService from '@/features/tasks/api';
 
-const taskService = new TaskService();
 export const router = createBrowserRouter([
     {
         path: '/',

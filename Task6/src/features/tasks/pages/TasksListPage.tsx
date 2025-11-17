@@ -6,9 +6,12 @@ import type { Task } from '../types';
 import { useNavigate } from 'react-router-dom';
 import type { TaskService } from '../api';
 import { Toast } from '@/shared/components/Toast';
-import type { ToastType } from '@/shared/types';
+import { ToastType } from '@/shared/types';
 
-export function TasksListPage({ taskService }: { taskService: TaskService }) {
+interface TasksListPageProps {
+    taskService: TaskService;
+}
+export function TasksListPage({ taskService }: TasksListPageProps) {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');

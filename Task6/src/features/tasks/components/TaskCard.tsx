@@ -1,6 +1,10 @@
-import type { TaskCardProps } from '@/features/tasks/types';
 import { formatTime, formatStatus, formatPriority } from '@/shared/helpers/formatFields';
+import type { Task } from '../types';
 
+interface TaskCardProps {
+    task: Task;
+    viewTask: (id: string) => void;
+}
 export function TaskCard({ task, viewTask }: TaskCardProps) {
     return (
         <div className="task-card" onClick={() => viewTask(task.id)}>

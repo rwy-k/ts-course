@@ -51,13 +51,10 @@ export class TaskService {
         }
     }
 
-    async updateTask(id: string, task: Task): Promise<Task> {
+    async updateTask(task: Task): Promise<Task> {
         this.validateTask(task);
-        if (task.id !== id) {
-            throw new Error('Id mismatch: ' + task.id + ' !== ' + id);
-        }
         try {   
-            return fetch(`${this.API_URL}/${id}`, {
+            return fetch(`${this.API_URL}/${task.id}`, {
                 method: 'PUT',
                 body: JSON.stringify(task),
             }).then(res => res.json());
@@ -78,3 +75,5 @@ export class TaskService {
         }
     }
 }
+
+export default new TaskService();

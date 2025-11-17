@@ -7,39 +7,30 @@ import { TaskForm } from '../components/TaskForm';
 import { Toast } from '@/shared/components/Toast';
 import { EmptyState } from '@/shared/components/EmptyState';
 import { useNavigate } from 'react-router-dom';
-import { taskSchema } from '@/shared/helpers/validation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { formatDateForInput } from '@/shared/helpers/formatFields';
 import { ToastType } from '@/shared/types';
 
-export function UpdateTaskPage({ taskService }: { taskService: TaskService }) {
+interface UpdateTaskPageProps {
+    taskService: TaskService;
+}
+export function UpdateTaskPage({ taskService }: UpdateTaskPageProps) {
     const { id } = useParams();
     const [task, setTask] = useState<Task | null>(null);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [toastType, setToastType] = useState<ToastType>(ToastType.SUCCESS);
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors, isDirty }, setValue } = useForm<TaskFormData>({
-        mode: 'onBlur',
-        resolver: zodResolver(taskSchema),
-    });
 
     useEffect(() => {
         if (!id) return;
         taskService.getTaskById(id).then((task) => {
             setTask(task);
-            setValue('title', task.title);
-            setValue('description', task.description);
-            setValue('deadline', formatDateForInput(task.deadline));
-            setValue('status', task.status);
-            setValue('priority', task.priority);
         });
-    }, [id, setValue, taskService]);
+    }, [id, taskService]);
 
     const onSubmit = async (data: TaskFormData) => {
         try {
-            await taskService.updateTask(id!, {
+            await taskService.updateTask({
                 ...task!,
                 ...data,
                 deadline: new Date(data.deadline),
@@ -58,13 +49,21 @@ export function UpdateTaskPage({ taskService }: { taskService: TaskService }) {
             }, 2000);
         }
     }
-    const isDisabled = Object.keys(errors).length > 0 || !isDirty;
+
     return (
         <div className="update-task-page">
             <div className="update-task-page-header">
                 <h1>Update Task</h1>
             </div>
-            {task ? <TaskForm register={register} errors={errors} buttonText="Update Task" handleSubmit={handleSubmit(onSubmit)} isDisabled={isDisabled} /> : <EmptyState message="Task not found" />}
+            {task 
+            ? <TaskForm buttonText="Update Task" onSubmit={onSubmit} isEdit={true} defaultValues={{
+                title: task.title,
+                description: task.description,
+                deadline: formatDateForInput(task.deadline),
+                status: task.status,
+                priority: task.priority,
+            }} /> 
+            : <EmptyState message="Task not found" />}
             <button onClick={() => navigate(`/tasks/${id}`)}>Back</button>
             <Toast message={toastMessage} type={toastType} show={showToast} />
         </div>
