@@ -12,14 +12,7 @@ const taskSchema = z.object({
     title: z.string(),
 });
 
-const taskUpdateSchema = z.object({
-    deadline: z.string().transform((str: string) => new Date(str)).optional(),
-    description: z.string().optional(),
-    status: z.enum([Status.TODO, Status.IN_PROGRESS, Status.DONE]).optional(),
-    priority: z.enum(Object.values(Priority)).optional(),
-    type: z.enum(Object.values(TaskType)).optional(),
-    title: z.string().optional(),
-});
+const taskUpdateSchema = taskSchema.partial();
 
 export const requestBodyValidator = (req: Request, res: Response, next: NextFunction) => {
     if (req.method !== 'POST' && req.method !== 'PUT') return next();

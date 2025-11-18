@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { z } from 'zod';
-import { Status, Priority } from '../types/task.types.js';
+import { Status, Priority, ITaskFilter } from '../types/task.types.js';
 import { CustomError } from '../utils/customErrors.js';
 
 const queryParamsFiltersSchema = z.object({
@@ -13,9 +13,16 @@ const queryParamsIdSchema = z.object({
     id: z.uuid({ version: 'v4', message: 'Invalid UUID' }),
 });
 
-export const queryParamsValidatorGetAll = (req: Request, res: Response, next: NextFunction) => {
+export const queryParamsValidatorGetAll = (req: Request<{}, {}, {}, ITaskFilter>, res: Response, next: NextFunction) => {
     try {
         queryParamsFiltersSchema.parse(req.query);
+
+        if (req.query.createdAt) {
+            const date = new Date(req.query.createdAt);
+            if (isNaN(date.getTime())) {
+                return next(new CustomError('Invalid createdAt date', 400));
+            }
+        }
     } catch (error) {
         return next(new CustomError('Invalid query parameters', 400));
     }

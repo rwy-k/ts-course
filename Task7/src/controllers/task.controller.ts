@@ -6,10 +6,10 @@ import { CustomError } from '../utils/customErrors.js';
 export class TaskController {
     constructor(private readonly taskService: TaskService) {}
 
-    getTasks = async (req: Request<{}, {}, {}, ITaskFilter>, res: Response, next: NextFunction) => {
+    getTasks = (req: Request<{}, {}, {}, ITaskFilter>, res: Response, next: NextFunction) => {
         const { status, priority, createdAt } = req.query;
         try {
-            const tasks = await this.taskService.getTasks({ 
+            const tasks = this.taskService.getTasks({ 
                 status: status, 
                 priority: priority, 
                 createdAt: createdAt 
@@ -32,18 +32,12 @@ export class TaskController {
 
     deleteTask = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
         const { id } = req.params;
-        if (!id) {
-            return next(new CustomError('ID is required', 400));
-        }
         res.status(200).json(this.taskService.deleteTask(id));
     }
 
     updateTask = async (req: Request<{ id: string }, {}, ITaskUpdate>, res: Response, next: NextFunction) => {
         const { id } = req.params;
         const task = req.body;
-        if (!id) {
-            return next(new CustomError('ID is required', 400));
-        }
         res.status(200).json(this.taskService.updateTask(id, task));
     }
 }
