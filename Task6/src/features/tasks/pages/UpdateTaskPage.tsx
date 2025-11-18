@@ -1,7 +1,7 @@
 import '../styles/update-task.css';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { TaskService } from '@/features/tasks/api';
+import taskService from '../api';
 import type { Task, TaskFormData } from '@/features/tasks/types';
 import { TaskForm } from '../components/TaskForm';
 import { Toast } from '@/shared/components/Toast';
@@ -10,10 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { formatDateForInput } from '@/shared/helpers/formatFields';
 import { ToastType } from '@/shared/types';
 
-interface UpdateTaskPageProps {
-    taskService: TaskService;
-}
-export function UpdateTaskPage({ taskService }: UpdateTaskPageProps) {
+export function UpdateTaskPage() {
     const { id } = useParams();
     const [task, setTask] = useState<Task | null>(null);
     const [showToast, setShowToast] = useState(false);
@@ -26,7 +23,7 @@ export function UpdateTaskPage({ taskService }: UpdateTaskPageProps) {
         taskService.getTaskById(id).then((task) => {
             setTask(task);
         });
-    }, [id, taskService]);
+    }, [id]);
 
     const onSubmit = async (data: TaskFormData) => {
         try {
@@ -37,13 +34,12 @@ export function UpdateTaskPage({ taskService }: UpdateTaskPageProps) {
             });
             setToastMessage('Task updated successfully');
             setToastType(ToastType.SUCCESS);
-            setShowToast(true);
         } catch (error) {
             console.error(error);
             setToastMessage('Failed to update task');
             setToastType(ToastType.ERROR);
-            setShowToast(true);
         } finally {
+            setShowToast(true);
             setTimeout(() => {
                 setShowToast(false);
             }, 2000);

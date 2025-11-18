@@ -79,21 +79,12 @@
     },
     {
       "title": "Task 0",
-      "description": "Description 1",
+      "description": "Description ",
       "deadline": "2025-11-30T00:00:00.000Z",
       "status": "in_progress",
       "priority": "medium",
       "id": "65e3a33f-81df-4333-b29f-f50da113981c",
       "createdAt": "2025-10-24T11:52:15.925Z"
-    },
-    {
-      "id": "5a348ed9-1af7-4608-bfdc-a31e79800939",
-      "title": "Test",
-      "description": "Description",
-      "deadline": "2025-11-23T00:00:00.000Z",
-      "status": "todo",
-      "priority": "low",
-      "createdAt": "2025-11-17T20:28:42.867Z"
     }
   ]
 }

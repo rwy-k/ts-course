@@ -3,15 +3,12 @@ import { TaskForm } from "../components/TaskForm";
 import { type TaskFormData, Status, Priority } from "../types";
 import { ToastType } from '@/shared/types';
 import { Toast } from '@/shared/components/Toast';
-import type { TaskService } from "../api";
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
+import taskService from '../api';
 
-interface CreateTaskPageProps {
-    taskService: TaskService;
-}
-export function CreateTaskPage({ taskService }: CreateTaskPageProps) {
+export function CreateTaskPage() {
     const navigate = useNavigate();
     
     const [showToast, setShowToast] = useState(false);
@@ -28,13 +25,12 @@ export function CreateTaskPage({ taskService }: CreateTaskPageProps) {
             });
             setToastMessage('Task created successfully');
             setToastType(ToastType.SUCCESS);
-            setShowToast(true);
         } catch (error) {
             console.error(error);
             setToastMessage('Failed to create task');
             setToastType(ToastType.ERROR);
-            setShowToast(true);
         } finally {
+            setShowToast(true);
             setTimeout(() => {
                 setShowToast(false);
             }, 2000);

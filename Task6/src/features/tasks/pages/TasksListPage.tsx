@@ -4,14 +4,11 @@ import { EmptyState } from '@/shared/components/EmptyState';
 import { useState, useEffect } from 'react';
 import type { Task } from '../types';
 import { useNavigate } from 'react-router-dom';
-import type { TaskService } from '../api';
+import taskService from '../api';
 import { Toast } from '@/shared/components/Toast';
 import { ToastType } from '@/shared/types';
 
-interface TasksListPageProps {
-    taskService: TaskService;
-}
-export function TasksListPage({ taskService }: TasksListPageProps) {
+export function TasksListPage() {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
@@ -23,8 +20,8 @@ export function TasksListPage({ taskService }: TasksListPageProps) {
             console.error(error);
             setToastMessage('Failed to get tasks');
             setToastType(ToastType.ERROR);
-            setShowToast(true);
         }).finally(() => {
+            setShowToast(true);
             setTimeout(() => {
                 setShowToast(false);
             }, 2000);
