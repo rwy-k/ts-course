@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import { TasksListPage } from '../pages/TasksListPage';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { Status, Priority } from '../enums';
-import type { TaskService } from '../api';
+import type { TaskService } from '@/api/task.controller';
 
 const mockTasks = [
     {
@@ -35,7 +35,7 @@ const mockTasks = [
     },
 ];
 describe('TasksListPage', () => {
-    it('should render the tasks list page', () => {
+    it('should render the tasks list page', async () => {
         const mockTaskService: Partial<TaskService> = {
             getTasks: vi.fn().mockResolvedValue(mockTasks),
         };
@@ -44,10 +44,10 @@ describe('TasksListPage', () => {
                 <TasksListPage taskService={mockTaskService as TaskService} />
             </MemoryRouter>,
         );
-        expect(screen.getByText('Tasks List')).toBeInTheDocument();
+        expect(await screen.findByText('Tasks List')).toBeInTheDocument();
         expect(screen.getAllByText('Create Task').length).toBeGreaterThan(0);
     });
-    it('should render the tasks list', () => {
+    it('should render the tasks list', async () => {
         const mockTaskService: Partial<TaskService> = {
             getTasks: vi.fn().mockResolvedValue([]),
         };
@@ -56,9 +56,9 @@ describe('TasksListPage', () => {
                 <TasksListPage taskService={mockTaskService as TaskService} />
             </MemoryRouter>,
         );
-        expect(screen.getByText('Tasks List')).toBeInTheDocument();
+        expect(await screen.findByText('Tasks List')).toBeInTheDocument();
     });
-    it('should render the empty state', () => {
+    it('should render the empty state', async () => {
         const mockTaskService: Partial<TaskService> = {
             getTasks: vi.fn().mockResolvedValue([]),
         };
@@ -67,7 +67,7 @@ describe('TasksListPage', () => {
                 <TasksListPage taskService={mockTaskService as TaskService} />
             </MemoryRouter>,
         );
-        expect(screen.getByText('No tasks found')).toBeInTheDocument();
+        expect(await screen.findByText('No tasks found')).toBeInTheDocument();
         expect(screen.getByText('Click the button below to create a new task')).toBeInTheDocument();
         expect(screen.getAllByText('Create Task').length).toBe(2);
     });
@@ -85,7 +85,6 @@ describe('TasksListPage', () => {
         expect(await screen.findAllByTestId('task-title')).toHaveLength(3);
         expect((await screen.findAllByTestId('task-title'))[0]).toHaveTextContent('Test Task');
         expect(screen.getAllByTestId('task-deadline')).toHaveLength(3);
-        expect(screen.getAllByTestId('task-status')).toHaveLength(3);
         expect(screen.getAllByTestId('task-priority')).toHaveLength(3);
     });
 

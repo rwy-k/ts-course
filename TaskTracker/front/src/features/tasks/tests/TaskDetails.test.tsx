@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { TaskDetailsPage } from '../pages/TaskDetailsPage';
-import { TaskService } from '../api';
+import { TaskService } from '@/api/task.controller';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Status, Priority } from '../enums';
@@ -46,7 +46,7 @@ describe('TaskDetailsPage', () => {
                 </Routes>
             </MemoryRouter>,
         );
-        expect(screen.getByText('Back')).toBeInTheDocument();
+        expect(await screen.findByText('Back')).toBeInTheDocument();
     });
     it('should render the delete button', async () => {
         const mockTaskService: Partial<TaskService> = {
@@ -156,6 +156,6 @@ describe('TaskDetailsPage', () => {
                 </Routes>
             </MemoryRouter>,
         );
-        expect(screen.getByText('Task not found')).toBeInTheDocument();
+        expect(await screen.findByText('Task not found')).toBeInTheDocument();
     });
 });

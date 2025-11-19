@@ -4,8 +4,8 @@ import { Status, Priority } from '../types/task.types.js';
 import { CustomError } from '../utils/customErrors.js';
 
 const queryParamsFiltersSchema = z.object({
-    status: z.enum([Status.TODO, Status.IN_PROGRESS, Status.IN_REVIEW, Status.DONE]).optional(),
-    priority: z.enum([Priority.LOW, Priority.MEDIUM, Priority.HIGH]).optional(),
+    status: z.enum(Object.values(Status)).optional(),
+    priority: z.enum(Object.values(Priority)).optional(),
     createdAt: z
         .string()
         .transform((str: string) => new Date(str))
@@ -13,7 +13,7 @@ const queryParamsFiltersSchema = z.object({
 });
 
 const queryParamsIdSchema = z.object({
-    id: z.string().uuid({ version: 'v4', message: 'Invalid UUID' }),
+    id: z.uuid({ version: 'v4', message: 'Invalid UUID' }),
 });
 
 export const queryParamsValidatorGetAll = (req: Request, res: Response, next: NextFunction) => {

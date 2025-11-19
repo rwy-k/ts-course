@@ -1,6 +1,6 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { UpdateTaskPage } from '../pages/UpdateTaskPage';
-import { TaskService } from '../api';
+import { TaskService } from '@/api/task.controller';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
@@ -31,7 +31,7 @@ describe('UpdateTaskPage', () => {
                 </Routes>
             </MemoryRouter>,
         );
-        expect(screen.getByRole('heading', { name: /update task/i })).toBeInTheDocument();
+        expect(await screen.findByRole('heading', { name: /update task/i })).toBeInTheDocument();
     });
     it('should render the back button', async () => {
         const mockTaskService: Partial<TaskService> = {
@@ -47,7 +47,7 @@ describe('UpdateTaskPage', () => {
                 </Routes>
             </MemoryRouter>,
         );
-        expect(screen.getByText('Back')).toBeInTheDocument();
+        expect(await screen.findByText('Back')).toBeInTheDocument();
     });
     it('submit button should be disabled if the form is invalid', async () => {
         const mockTaskService: Partial<TaskService> = {

@@ -7,10 +7,10 @@ const router = Router();
 const userService = new UserService();
 const userController = new UserController(userService);
 
-router.get('/', userController.getUsers.bind(userController));
-router.get('/:id', userController.getUserById.bind(userController));
-router.post('/', userController.createUser.bind(userController));
-router.put('/:id', userController.updateUser.bind(userController));
-router.delete('/:id', userController.deleteUser.bind(userController));
+router.get('/', userController.getUsers);
+router.get('/:id', userController.getUserById);
+router.post('/', userController.createUser);
+router.put('/:id', userController.updateUser);
+router.delete('/id', userController.deleteUser);
 
 export default router;

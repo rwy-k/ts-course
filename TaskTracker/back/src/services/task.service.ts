@@ -67,17 +67,19 @@ export class TaskService {
             throw new CustomError('Invalid task ID format', 400);
         }
 
-        if (newTask.deadline && newTask.deadline < new Date(newTask.createdAt as Date)) {
+        const task = await this.taskModel.findByPk(id);
+
+        if (!task) {
+            return await this.taskModel.create({ ...newTask, id, createdAt: new Date() });
+        }
+
+        // Validate deadline against existing task's createdAt
+        if (newTask.deadline && newTask.deadline < new Date(task.createdAt)) {
             throw new CustomError('Deadline must be after creation date', 400);
         }
 
-        const task = await this.taskModel.findByPk(id);
-        if (!task) {
-            return await this.taskModel.create({ ...newTask, id, createdAt: new Date() });
-        } else {
-            await this.taskModel.update({ ...newTask }, { where: { id } });
-            const updatedTask = await this.taskModel.findByPk(id);
-            return updatedTask;
-        }
+        await this.taskModel.update({ ...newTask }, { where: { id } });
+        const updatedTask = await this.taskModel.findByPk(id);
+        return updatedTask;
     }
 }

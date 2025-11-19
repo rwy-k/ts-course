@@ -6,7 +6,7 @@ import { CustomError } from '../utils/customErrors.js';
 export class TaskController {
     constructor(private readonly taskService: TaskService) {}
 
-    async getTasks(req: Request, res: Response, next: NextFunction) {
+    getTasks = async (req: Request, res: Response, next: NextFunction) => {
         const { status, priority, createdAt } = req.query;
         try {
             const tasks = await this.taskService.getTasks({
@@ -17,11 +17,14 @@ export class TaskController {
             res.status(200).json(tasks);
         } catch (error) {
             console.error(error);
+            if (error instanceof CustomError) {
+                return next(error);
+            }
             return next(new CustomError('Failed to get tasks', 400));
         }
-    }
+    };
 
-    async getTaskById(req: Request, res: Response, next: NextFunction) {
+    getTaskById = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         if (!id) {
             return next(new CustomError('ID is required', 400));
@@ -31,22 +34,28 @@ export class TaskController {
             res.status(200).json(task);
         } catch (error) {
             console.error(error);
+            if (error instanceof CustomError) {
+                return next(error);
+            }
             return next(new CustomError('Failed to get task', 400));
         }
-    }
+    };
 
-    async createTask(req: Request, res: Response, next: NextFunction) {
+    createTask = async (req: Request, res: Response, next: NextFunction) => {
         const task = req.body as ITask;
         try {
             const newTask = await this.taskService.createTask(task);
             res.status(201).json(newTask);
         } catch (error) {
             console.error(error);
+            if (error instanceof CustomError) {
+                return next(error);
+            }
             return next(new CustomError('Failed to create task', 400));
         }
-    }
+    };
 
-    async deleteTask(req: Request, res: Response, next: NextFunction) {
+    deleteTask = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         if (!id) {
             return next(new CustomError('ID is required', 400));
@@ -60,9 +69,9 @@ export class TaskController {
             }
             return next(new CustomError('Failed to delete task', 400));
         }
-    }
+    };
 
-    async updateTask(req: Request, res: Response, next: NextFunction) {
+    updateTask = async (req: Request, res: Response, next: NextFunction) => {
         const { id } = req.params;
         const task = req.body as ITaskUpdate;
         if (!id) {
@@ -73,7 +82,10 @@ export class TaskController {
             res.status(200).json(updatedTask);
         } catch (error) {
             console.error(error);
+            if (error instanceof CustomError) {
+                return next(error);
+            }
             return next(new CustomError('Failed to update task', 400));
         }
-    }
+    };
 }

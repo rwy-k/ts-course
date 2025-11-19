@@ -10,7 +10,7 @@ export function TaskCard({ task, viewTask }: TaskCardProps) {
     };
 
     return (
-        <div className="task-card" onClick={handleClick}>
+        <div onClick={handleClick}>
             <h1 data-testid="task-title">{task.title}</h1>
             <p data-testid="task-deadline">
                 <strong>Deadline:</strong> {formatTime(task.deadline)}
