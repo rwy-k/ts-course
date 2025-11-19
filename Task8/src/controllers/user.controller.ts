@@ -29,18 +29,12 @@ export class UserController {
     updateUser = async (req: Request<{ id: string }, {}, IUser>, res: Response, next: NextFunction) => {
         const { id } = req.params;
         const user = req.body;
-        if (!id) {
-            return next(new CustomError('ID is required', 400));
-        }
         const updatedUser = await this.userService.updateUser(id, user);
         res.status(200).json(updatedUser);
     }
 
     deleteUser = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
         const { id } = req.params;
-        if (!id) {
-            return next(new CustomError('ID is required', 400));
-        }
         await this.userService.deleteUser(id);
         res.status(204).json({ message: 'User deleted successfully' });
     }

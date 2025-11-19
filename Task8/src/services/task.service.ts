@@ -17,7 +17,9 @@ export class TaskService {
                 if (isNaN(date.getTime())) {
                     throw new Error('Invalid createdAt date');
                 }
-                acc[key] = { [Op.gte]: date };
+                const startOfDay = new Date(date.setHours(0, 0, 0, 0));
+                const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+                acc[key] = { [Op.between]: [startOfDay, endOfDay] };
             } else if (value) {
                 acc[key] = { [Op.eq]: value };
             }

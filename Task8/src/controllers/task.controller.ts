@@ -12,26 +12,17 @@ export class TaskController {
             const tasks = await this.taskService.getTasks({ status: status, priority: priority, createdAt: createdAt });
             res.status(200).json(tasks);
         } catch (error) {
-            if (error instanceof CustomError) {
-                return next(error);
-            }
-            return next(new CustomError('Failed to get tasks', 400));
+            next(error)
         }
     }
 
     getTaskById = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
         const { id } = req.params;
-        if (!id) {
-            return next(new CustomError('ID is required', 400));
-        }
         try {
             const task = await this.taskService.getTaskById(id);
             res.status(200).json(task);
         } catch (error) {
-            if (error instanceof CustomError) {
-                return next(error);
-            }
-            return next(new CustomError('Failed to get task', 400));
+            next(error)
         }
     }
 
@@ -41,43 +32,28 @@ export class TaskController {
             const newTask = await this.taskService.createTask(task);
             res.status(201).json(newTask);
         } catch (error) {
-            if (error instanceof CustomError) {
-                return next(error);
-            }
-            return next(new CustomError('Failed to create task', 400));
+            next(error)
         }
     }
 
     deleteTask = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
         const { id } = req.params;
-        if (!id) {
-            return next(new CustomError('ID is required', 400));
-        }
         try {
             await this.taskService.deleteTask(id);
             res.status(204).send();
         } catch (error) {
-            if (error instanceof CustomError) {
-                return next(error);
-            }
-            return next(new CustomError('Failed to delete task', 400));
+            next(error)
         }
     }
 
     updateTask = async (req: Request<{ id: string }, {}, ITaskUpdate>, res: Response, next: NextFunction) => {
         const { id } = req.params;
         const task = req.body;
-        if (!id) {
-            return next(new CustomError('ID is required', 400));
-        }
         try {
             const updatedTask = await this.taskService.updateTask(id, task);
             res.status(200).json(updatedTask);
         } catch (error) {
-            if (error instanceof CustomError) {
-                return next(error);
-            }
-            return next(new CustomError('Failed to update task', 400));
+            next(error)
         }
     }
 }
