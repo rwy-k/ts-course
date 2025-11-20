@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { z } from 'zod';
+import { ZodError, z } from 'zod';
 import { Status, Priority } from '../types/task.types.js';
 import { CustomError } from '../utils/customErrors.js';
 
@@ -17,7 +17,10 @@ export const queryParamsValidatorGetAll = (req: Request, res: Response, next: Ne
     try {
         queryParamsFiltersSchema.parse(req.query);
     } catch (error) {
-        return next(new CustomError('Invalid query parameters', 400));
+        if (error instanceof ZodError) {
+            return next(new CustomError(error.message, 400));
+        }
+        return next(new CustomError('Failed to validate query parameters', 400));
     }
     next();
 };

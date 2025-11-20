@@ -19,6 +19,9 @@ export const requestBodyValidator = (req: Request, res: Response, next: NextFunc
         taskSchema.parse(req.body);
         next();
     } catch (error) {
-        return next(new CustomError((error as ZodError).message, 400));
+        if (error instanceof ZodError) {
+            return next(new CustomError(error.message, 400));
+        }
+        return next(new CustomError('Failed to validate request body', 400));
     }
 };

@@ -1,18 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 import { TaskService } from '../services/task.service.js';
-import { Status, Priority, type ITask, type ITaskUpdate } from '../types/task.types.js';
+import { type ITask, type ITaskUpdate, type ITaskFilter } from '../types/task.types.js';
 import { CustomError } from '../utils/customErrors.js';
 
 export class TaskController {
     constructor(private readonly taskService: TaskService) {}
 
-    getTasks = async (req: Request, res: Response, next: NextFunction) => {
+    getTasks = async (req: Request<object, object, object, ITaskFilter>, res: Response, next: NextFunction) => {
         const { status, priority, createdAt } = req.query;
         try {
             const tasks = await this.taskService.getTasks({
-                status: status as Status,
-                priority: priority as Priority,
-                createdAt: createdAt as string,
+                status: status,
+                priority: priority,
+                createdAt: createdAt,
             });
             res.status(200).json(tasks);
         } catch (error) {
@@ -24,11 +24,8 @@ export class TaskController {
         }
     };
 
-    getTaskById = async (req: Request, res: Response, next: NextFunction) => {
+    getTaskById = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
         const { id } = req.params;
-        if (!id) {
-            return next(new CustomError('ID is required', 400));
-        }
         try {
             const task = await this.taskService.getTaskById(id);
             res.status(200).json(task);
@@ -41,8 +38,8 @@ export class TaskController {
         }
     };
 
-    createTask = async (req: Request, res: Response, next: NextFunction) => {
-        const task = req.body as ITask;
+    createTask = async (req: Request<object, object, ITask>, res: Response, next: NextFunction) => {
+        const task = req.body;
         try {
             const newTask = await this.taskService.createTask(task);
             res.status(201).json(newTask);
@@ -55,11 +52,8 @@ export class TaskController {
         }
     };
 
-    deleteTask = async (req: Request, res: Response, next: NextFunction) => {
+    deleteTask = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
         const { id } = req.params;
-        if (!id) {
-            return next(new CustomError('ID is required', 400));
-        }
         try {
             await this.taskService.deleteTask(id);
             res.status(204).send();
@@ -71,12 +65,9 @@ export class TaskController {
         }
     };
 
-    updateTask = async (req: Request, res: Response, next: NextFunction) => {
+    updateTask = async (req: Request<{ id: string }, object, ITaskUpdate>, res: Response, next: NextFunction) => {
         const { id } = req.params;
-        const task = req.body as ITaskUpdate;
-        if (!id) {
-            return next(new CustomError('ID is required', 400));
-        }
+        const task = req.body;
         try {
             const updatedTask = await this.taskService.updateTask(id, task);
             res.status(200).json(updatedTask);

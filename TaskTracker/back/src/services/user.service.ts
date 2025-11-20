@@ -1,6 +1,7 @@
 import User from '../models/User.model.js';
 import { IUser } from '../types/user.types.js';
 import Task from '../models/Task.model.js';
+import { CustomError } from '../utils/customErrors.js';
 export class UserService {
     private userModel: typeof User;
     constructor() {
@@ -19,19 +20,26 @@ export class UserService {
 
     async getUserById(id: string): Promise<IUser | null> {
         const user = await this.userModel.findByPk(id);
+        if (!user) {
+            throw new CustomError('User not found', 404);
+        }
         return user;
     }
 
     async updateUser(id: string, user: Partial<IUser>): Promise<IUser | null> {
         const [affectedCount] = await this.userModel.update(user, { where: { id } });
         if (affectedCount === 0) {
-            return null;
+            throw new CustomError('User not found', 404);
         }
         const updatedUser = await this.getUserById(id);
         return updatedUser;
     }
 
     async deleteUser(id: string): Promise<void> {
+        const user = await this.userModel.findByPk(id);
+        if (!user) {
+            throw new CustomError('User not found', 404);
+        }
         await this.userModel.destroy({ where: { id } });
     }
 }

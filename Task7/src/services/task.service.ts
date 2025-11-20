@@ -19,7 +19,10 @@ export class TaskService {
                 isMatch = isMatch && task.priority === filterBy.priority;
             }
             if (filterBy?.createdAt) {
-                isMatch = isMatch && task.createdAt >= new Date(filterBy.createdAt);
+                const date = new Date(filterBy.createdAt);
+                const startOfDay = new Date(date.setHours(0, 0, 0, 0));
+                const endOfDay = new Date(date.setHours(23, 59, 59, 999));
+                isMatch = isMatch && task.createdAt >= startOfDay && task.createdAt <= endOfDay;
             }
             return isMatch;
         });

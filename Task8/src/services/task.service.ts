@@ -14,9 +14,6 @@ export class TaskService {
         const where = Object.entries(filterBy).reduce((acc, [key, value]) => {
             if (value && key === 'createdAt') {
                 const date = new Date(value);
-                if (isNaN(date.getTime())) {
-                    throw new Error('Invalid createdAt date');
-                }
                 const startOfDay = new Date(date.setHours(0, 0, 0, 0));
                 const endOfDay = new Date(date.setHours(23, 59, 59, 999));
                 acc[key] = { [Op.between]: [startOfDay, endOfDay] };

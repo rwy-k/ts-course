@@ -6,7 +6,7 @@ import { CustomError } from '../utils/customErrors.js';
 const taskSchema = z.object({
     deadline: z.string().transform((str: string) => new Date(str)).refine((date) => date > new Date(), { message: 'Deadline must be in the future' }),
     description: z.string().optional(),
-    status: z.enum([Status.TODO, Status.IN_PROGRESS, Status.DONE]),
+    status: z.enum(Object.values(Status)),
     priority: z.enum(Object.values(Priority)),
     type: z.enum(Object.values(TaskType)),
     title: z.string(),
@@ -25,6 +25,9 @@ export const requestBodyValidator = (req: Request, res: Response, next: NextFunc
         }
         next();
     } catch (error) {
-        return next(new CustomError((error as ZodError).message, 400));
+        if (error instanceof ZodError) {
+            return next(new CustomError(error.message, 400));
+        }
+        return next(new CustomError('Failed to validate request body', 400));
     }
 };

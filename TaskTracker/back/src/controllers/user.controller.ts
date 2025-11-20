@@ -1,5 +1,4 @@
 import { UserService } from '../services/user.service.js';
-import { CustomError } from '../utils/customErrors.js';
 import { Request, Response, NextFunction } from 'express';
 import { IUser } from '../types/user.types.js';
 
@@ -11,37 +10,48 @@ export class UserController {
         res.status(200).json(users);
     };
 
-    getUserById = async (req: Request, res: Response, next: NextFunction) => {
+    getUserById = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
         const { id } = req.params;
-        if (!id) {
-            return next(new CustomError('ID is required', 400));
+        try {
+            const user = await this.userService.getUserById(id);
+            res.status(200).json(user);
+        } catch (error) {
+            console.error(error);
+            return next(error);
         }
-        const user = await this.userService.getUserById(id);
-        res.status(200).json(user);
     };
 
-    createUser = async (req: Request, res: Response) => {
-        const user = req.body as IUser;
-        const newUser = await this.userService.createUser(user);
-        res.status(201).json(newUser);
+    createUser = async (req: Request<object, object, IUser>, res: Response, next: NextFunction) => {
+        const user = req.body;
+        try {
+            const newUser = await this.userService.createUser(user);
+            res.status(201).json(newUser);
+        } catch (error) {
+            console.error(error);
+            return next(error);
+        }
     };
 
-    updateUser = async (req: Request, res: Response, next: NextFunction) => {
+    updateUser = async (req: Request<{ id: string }, object, IUser>, res: Response, next: NextFunction) => {
         const { id } = req.params;
-        const user = req.body as IUser;
-        if (!id) {
-            return next(new CustomError('ID is required', 400));
+        const user = req.body;
+        try {
+            const updatedUser = await this.userService.updateUser(id, user);
+            res.status(200).json(updatedUser);
+        } catch (error) {
+            console.error(error);
+            return next(error);
         }
-        const updatedUser = await this.userService.updateUser(id, user);
-        res.status(200).json(updatedUser);
     };
 
-    deleteUser = async (req: Request, res: Response, next: NextFunction) => {
+    deleteUser = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
         const { id } = req.params;
-        if (!id) {
-            return next(new CustomError('ID is required', 400));
+        try {
+            await this.userService.deleteUser(id);
+            res.status(204).json({ message: 'User deleted successfully' });
+        } catch (error) {
+            console.error(error);
+            return next(error);
         }
-        await this.userService.deleteUser(id);
-        res.status(204).json({ message: 'User deleted successfully' });
     };
 }

@@ -32,13 +32,10 @@ export class TaskService {
     }
 
     async getTaskById(id: string) {
-        // Validate UUID format
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-        if (!uuidRegex.test(id)) {
-            throw new CustomError('Invalid task ID format', 400);
-        }
-
         const task = await this.taskModel.findByPk(id);
+        if (!task) {
+            throw new CustomError('Task not found', 404);
+        }
         return task;
     }
 
@@ -47,12 +44,6 @@ export class TaskService {
     }
 
     async deleteTask(id: string) {
-        // Validate UUID format
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-        if (!uuidRegex.test(id)) {
-            throw new CustomError('Invalid task ID format', 400);
-        }
-
         const task = await this.taskModel.findByPk(id);
         if (!task) {
             throw new CustomError('Task not found', 404);
@@ -61,19 +52,12 @@ export class TaskService {
     }
 
     async updateTask(id: string, newTask: ITaskUpdate) {
-        // Validate UUID format
-        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-        if (!uuidRegex.test(id)) {
-            throw new CustomError('Invalid task ID format', 400);
-        }
-
         const task = await this.taskModel.findByPk(id);
 
         if (!task) {
-            return await this.taskModel.create({ ...newTask, id, createdAt: new Date() });
+            throw new CustomError('Task not found', 404);
         }
 
-        // Validate deadline against existing task's createdAt
         if (newTask.deadline && newTask.deadline < new Date(task.createdAt)) {
             throw new CustomError('Deadline must be after creation date', 400);
         }
