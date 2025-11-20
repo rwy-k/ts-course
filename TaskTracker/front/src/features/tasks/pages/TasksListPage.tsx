@@ -3,7 +3,7 @@ import { EmptyState } from '@/shared/components/EmptyState';
 import { useState, useEffect } from 'react';
 import type { Task } from '../types';
 import { useNavigate } from 'react-router-dom';
-import type { TaskService } from '@/api/task.controller';
+import taskService from '@/api/task.controller';
 import { Toast } from '@/shared/components/Toast';
 import { ToastType } from '@/shared/types';
 import { Status } from '../enums';
@@ -12,7 +12,7 @@ import { DraggableTaskCard } from '../components/DraggableTaskCard';
 import { DroppableColumn } from '../components/DroppableColumn';
 import { Loader } from '@/shared/components/Loader';
 
-export function TasksListPage({ taskService }: { taskService: TaskService }) {
+export function TasksListPage() {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
@@ -36,7 +36,7 @@ export function TasksListPage({ taskService }: { taskService: TaskService }) {
                 }, 2000);
                 setLoading(false);
             });
-    }, [taskService]);
+    }, []);
 
     const viewTask = (id: string) => {
         navigate(`/tasks/${id}`);

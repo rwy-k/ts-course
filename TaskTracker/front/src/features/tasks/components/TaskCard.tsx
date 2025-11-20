@@ -1,5 +1,10 @@
-import type { TaskCardProps } from '@/features/tasks/types';
 import { formatTime, formatPriority } from '@/shared/helpers/formatFields';
+import type { Task } from '../types';
+
+export interface TaskCardProps {
+    task: Task;
+    viewTask: (id: string) => void;
+}
 
 export function TaskCard({ task, viewTask }: TaskCardProps) {
     const handleClick = (e: React.MouseEvent) => {

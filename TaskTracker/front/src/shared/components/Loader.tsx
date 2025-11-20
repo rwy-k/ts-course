@@ -1,6 +1,10 @@
 import '../styles/loader.css';
 
-export function Loader({ loading = true }: { loading?: boolean }) {
+export interface LoaderProps {
+    loading?: boolean;
+}
+
+export function Loader({ loading = true }: LoaderProps) {
     return (
         <div className="loader">
             <div className="loader-spinner"></div>

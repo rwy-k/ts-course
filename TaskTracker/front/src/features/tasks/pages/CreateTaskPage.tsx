@@ -1,21 +1,18 @@
 import '../styles/create-task.css';
 import { TaskForm } from '../components/TaskForm';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { type TaskFormData } from '../types';
 import { Status, Priority, TaskType } from '../enums';
-import { taskSchema } from '@/shared/helpers/validation';
 import { Toast } from '@/shared/components/Toast';
-import type { TaskService } from '@/api/task.controller';
 import { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
 import type { User } from '../types';
-import { UsersService } from '@/api/users.controller';
 import { Loader } from '@/shared/components/Loader';
 import { ToastType } from '@/shared/types';
+import taskService from '@/api/task.controller';
+import usersService from '@/api/users.controller';
 
-export function CreateTaskPage({ taskService }: { taskService: TaskService }) {
+export function CreateTaskPage() {
     const navigate = useNavigate();
 
     const [showToast, setShowToast] = useState(false);
@@ -24,34 +21,11 @@ export function CreateTaskPage({ taskService }: { taskService: TaskService }) {
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isDirty, isValid },
-        reset,
-    } = useForm<TaskFormData>({
-        mode: 'onBlur',
-        resolver: zodResolver(taskSchema),
-        defaultValues: {
-            title: '',
-            description: '',
-            deadline: '',
-            status: Status.TODO,
-            priority: Priority.LOW,
-            type: TaskType.TASK,
-            userId: '',
-        },
-    });
-
     useEffect(() => {
-        const usersService = new UsersService();
         usersService
             .getUsers()
             .then((users) => {
                 setUsers(users);
-                if (users.length > 0) {
-                    reset({ userId: users[0].id }, { keepDefaultValues: true });
-                }
                 setLoading(false);
             })
             .catch((error) => {
@@ -61,7 +35,7 @@ export function CreateTaskPage({ taskService }: { taskService: TaskService }) {
                 setShowToast(true);
                 setLoading(false);
             });
-    }, [reset]);
+    }, []);
 
     const onSubmit = async (data: TaskFormData) => {
         try {
@@ -89,8 +63,6 @@ export function CreateTaskPage({ taskService }: { taskService: TaskService }) {
         }
     };
 
-    const isDisabled = !isDirty || !isValid;
-
     return (
         <div className="create-task-page">
             {loading && <Loader loading={loading} />}
@@ -100,11 +72,17 @@ export function CreateTaskPage({ taskService }: { taskService: TaskService }) {
                         <h1>Create Task</h1>
                     </div>
                     <TaskForm
-                        register={register}
-                        errors={errors}
                         buttonText="Create Task"
-                        handleSubmit={handleSubmit(onSubmit)}
-                        isDisabled={isDisabled}
+                        onSubmit={onSubmit}
+                        defaultValues={{
+                            title: '',
+                            description: '',
+                            deadline: '',
+                            status: Status.TODO,
+                            priority: Priority.LOW,
+                            type: TaskType.TASK,
+                            userId: '',
+                        }}
                         users={users}
                     />
                     <button onClick={() => navigate('/')}>Back</button>

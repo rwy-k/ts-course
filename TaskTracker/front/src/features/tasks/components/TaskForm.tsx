@@ -1,10 +1,38 @@
 import '../styles/task-form.css';
 import { Status, Priority, TaskType } from '@/features/tasks/enums';
-import type { TaskFormProps } from '@/features/tasks/types';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { taskSchema } from '@/shared/helpers/validation';
+import type { TaskFormData, User } from '../types';
 
-export function TaskForm({ register, errors, buttonText, handleSubmit, isDisabled, users }: TaskFormProps) {
+interface TaskFormProps {
+    buttonText: string;
+    onSubmit: (data: TaskFormData) => void;
+    defaultValues: TaskFormData;
+    isEdit?: boolean;
+    users: User[];
+}
+
+export function TaskForm({ buttonText, onSubmit, defaultValues, users, isEdit = false }: TaskFormProps) {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isDirty, isValid },
+        reset,
+    } = useForm<TaskFormData>({
+        mode: 'onBlur',
+        resolver: zodResolver(taskSchema),
+        defaultValues,
+    });
+    const onFormSubmit = (data: TaskFormData) => {
+        onSubmit(data);
+        if (!isEdit) {
+            reset();
+        }
+    };
+    const isDisabled = !isDirty || !isValid;
     return (
-        <form className="task-form" onSubmit={handleSubmit}>
+        <form className="task-form" onSubmit={handleSubmit(onFormSubmit)}>
             <label htmlFor="title">Title</label>
             <input
                 id="title"

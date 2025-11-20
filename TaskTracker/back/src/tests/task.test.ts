@@ -2,6 +2,7 @@ import db from '../config/database.js';
 import request from 'supertest';
 import app from '../app.js';
 import { Status, Priority, TaskType } from '../types/task.types.js';
+import { v4 as uuidv4 } from 'uuid';
 
 beforeEach(async () => {
     await db.sync({ force: true });
@@ -259,7 +260,8 @@ it('DELETE /tasks/:id delete task by invalid id', async () => {
 
 it('DELETE /tasks/:id delete task by non-existent id', async () => {
     // Use a valid UUID format that doesn't exist
-    const response = await request(app).delete(`/tasks/12345678-1234-1234-1234-123456789012`);
+    const userId = uuidv4();
+    const response = await request(app).delete(`/tasks/${userId}`);
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty('error');
 });

@@ -1,43 +1,37 @@
 import '../styles/update-task.css';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { TaskService } from '@/api/task.controller';
 import type { Task, TaskFormData } from '@/features/tasks/types';
 import { TaskForm } from '../components/TaskForm';
 import { Toast } from '@/shared/components/Toast';
 import { EmptyState } from '@/shared/components/EmptyState';
-import { useNavigate } from 'react-router-dom';
-import { taskSchema } from '@/shared/helpers/validation';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
 import { formatDateForInput } from '@/shared/helpers/formatFields';
 import type { User } from '../types';
-import { UsersService } from '@/api/users.controller';
+import usersService from '@/api/users.controller';
+import taskService from '@/api/task.controller';
 import { Loader } from '@/shared/components/Loader';
 import { ToastType } from '@/shared/types';
+import { Status, Priority, TaskType } from '../enums';
 
-export function UpdateTaskPage({ taskService }: { taskService: TaskService }) {
+export function UpdateTaskPage() {
     const { id } = useParams();
     const [task, setTask] = useState<Task | null>(null);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [toastType, setToastType] = useState<ToastType>(ToastType.SUCCESS);
-    const navigate = useNavigate();
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isDirty, isValid },
-        setValue,
-    } = useForm<TaskFormData>({
-        mode: 'onBlur',
-        resolver: zodResolver(taskSchema),
+    const [defaultValues, setDefaultValues] = useState<TaskFormData>({
+        title: '',
+        description: '',
+        deadline: '',
+        status: Status.TODO,
+        priority: Priority.LOW,
+        type: TaskType.TASK,
+        userId: '',
     });
-
     const [users, setUsers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const usersService = new UsersService();
         usersService.getUsers().then((users) => {
             setUsers(users);
             setLoading(false);
@@ -52,13 +46,17 @@ export function UpdateTaskPage({ taskService }: { taskService: TaskService }) {
         setLoading(true);
         taskService
             .getTaskById(id)
-            .then((task) => {
+            .then((task: Task) => {
                 setTask(task);
-                setValue('title', task.title);
-                setValue('description', task.description);
-                setValue('deadline', formatDateForInput(task.deadline));
-                setValue('status', task.status);
-                setValue('priority', task.priority);
+                setDefaultValues({
+                    title: task.title,
+                    description: task.description,
+                    deadline: formatDateForInput(task.deadline),
+                    status: task.status,
+                    priority: task.priority,
+                    type: TaskType.TASK,
+                    userId: task.userId,
+                });
                 setLoading(false);
             })
             .catch((error) => {
@@ -68,7 +66,7 @@ export function UpdateTaskPage({ taskService }: { taskService: TaskService }) {
                 setToastType(ToastType.ERROR);
                 setShowToast(true);
             });
-    }, [id, setValue, taskService]);
+    }, [id]);
 
     const onSubmit = async (data: TaskFormData) => {
         try {
@@ -94,7 +92,7 @@ export function UpdateTaskPage({ taskService }: { taskService: TaskService }) {
             }, 2000);
         }
     };
-    const isDisabled = !isDirty || !isValid;
+    const navigate = useNavigate();
     return (
         <div className="update-task-page">
             {loading && <Loader loading={loading} />}
@@ -105,12 +103,11 @@ export function UpdateTaskPage({ taskService }: { taskService: TaskService }) {
                     </div>
                     {task ? (
                         <TaskForm
-                            register={register}
-                            errors={errors}
                             buttonText="Update Task"
-                            handleSubmit={handleSubmit(onSubmit)}
-                            isDisabled={isDisabled}
+                            onSubmit={onSubmit}
+                            defaultValues={defaultValues}
                             users={users}
+                            isEdit={true}
                         />
                     ) : (
                         <EmptyState message="Task not found" />

@@ -1,70 +1,76 @@
 import { render, screen } from '@testing-library/react';
 import { TasksListPage } from '../pages/TasksListPage';
-import { describe, it, expect, vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import { Status, Priority } from '../enums';
-import type { TaskService } from '@/api/task.controller';
+import { Status, Priority, TaskType } from '../enums';
 
 const mockTasks = [
     {
         id: '1',
         title: 'Test Task',
         description: 'Test Description',
-        createdAt: new Date(),
-        deadline: new Date(),
+        createdAt: new Date('2024-01-01'),
+        deadline: new Date('2099-12-31'),
         status: Status.TODO,
         priority: Priority.HIGH,
+        type: TaskType.TASK,
+        userId: 'user-1',
     },
     {
         id: '2',
         title: 'Test Task 2',
         description: 'Test Description 2',
-        createdAt: new Date(),
-        deadline: new Date(),
+        createdAt: new Date('2024-01-02'),
+        deadline: new Date('2099-12-31'),
         status: Status.IN_PROGRESS,
         priority: Priority.MEDIUM,
+        type: TaskType.TASK,
+        userId: 'user-1',
     },
     {
         id: '3',
         title: 'Test Task 3',
         description: 'Test Description 3',
-        createdAt: new Date(),
-        deadline: new Date(),
+        createdAt: new Date('2024-01-03'),
+        deadline: new Date('2099-12-31'),
         status: Status.DONE,
         priority: Priority.LOW,
+        type: TaskType.TASK,
+        userId: 'user-1',
     },
 ];
+
 describe('TasksListPage', () => {
+    beforeEach(() => {
+        globalThis.fetch = vi.fn(() =>
+            Promise.resolve({
+                ok: true,
+                json: async () => [],
+            } as Response),
+        ) as typeof fetch;
+    });
+
     it('should render the tasks list page', async () => {
-        const mockTaskService: Partial<TaskService> = {
-            getTasks: vi.fn().mockResolvedValue(mockTasks),
-        };
         render(
             <MemoryRouter>
-                <TasksListPage taskService={mockTaskService as TaskService} />
+                <TasksListPage />
             </MemoryRouter>,
         );
         expect(await screen.findByText('Tasks List')).toBeInTheDocument();
         expect(screen.getAllByText('Create Task').length).toBeGreaterThan(0);
     });
     it('should render the tasks list', async () => {
-        const mockTaskService: Partial<TaskService> = {
-            getTasks: vi.fn().mockResolvedValue([]),
-        };
         render(
             <MemoryRouter>
-                <TasksListPage taskService={mockTaskService as TaskService} />
+                <TasksListPage />
             </MemoryRouter>,
         );
         expect(await screen.findByText('Tasks List')).toBeInTheDocument();
     });
     it('should render the empty state', async () => {
-        const mockTaskService: Partial<TaskService> = {
-            getTasks: vi.fn().mockResolvedValue([]),
-        };
         render(
             <MemoryRouter>
-                <TasksListPage taskService={mockTaskService as TaskService} />
+                <TasksListPage />
             </MemoryRouter>,
         );
         expect(await screen.findByText('No tasks found')).toBeInTheDocument();
@@ -73,12 +79,16 @@ describe('TasksListPage', () => {
     });
 
     it('should render the task cards with the correct data', async () => {
-        const mockTaskService: Partial<TaskService> = {
-            getTasks: vi.fn().mockResolvedValue(mockTasks),
-        };
+        globalThis.fetch = vi.fn(() =>
+            Promise.resolve({
+                ok: true,
+                json: async () => mockTasks,
+            } as Response),
+        ) as typeof fetch;
+
         render(
             <MemoryRouter>
-                <TasksListPage taskService={mockTaskService as TaskService} />
+                <TasksListPage />
             </MemoryRouter>,
         );
 
@@ -89,12 +99,11 @@ describe('TasksListPage', () => {
     });
 
     it('should show the toast when got an error fetching tasks', async () => {
-        const mockTaskService: Partial<TaskService> = {
-            getTasks: vi.fn().mockRejectedValue(new Error('Failed to get tasks')),
-        };
+        globalThis.fetch = vi.fn(() => Promise.reject(new Error('Failed to fetch'))) as typeof fetch;
+
         render(
             <MemoryRouter>
-                <TasksListPage taskService={mockTaskService as TaskService} />
+                <TasksListPage />
             </MemoryRouter>,
         );
         expect(await screen.findByText('Failed to get tasks')).toBeInTheDocument();

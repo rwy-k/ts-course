@@ -1,7 +1,11 @@
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
-import type { TaskCardProps } from '@/features/tasks/types';
+import type { Task } from '../types';
 import { TaskCard } from './TaskCard';
+export interface TaskCardProps {
+    task: Task;
+    viewTask: (id: string) => void;
+}
 
 export function DraggableTaskCard({ task, viewTask }: TaskCardProps) {
     const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({

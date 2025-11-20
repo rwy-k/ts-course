@@ -1,6 +1,6 @@
 import { API_URL } from '@/shared/constants';
 import type { User } from '@/features/tasks/types';
-export class UsersService {
+class UsersService {
     private readonly API_URL = `${API_URL}/users`;
     async getUsers(): Promise<User[]> {
         try {
@@ -11,3 +11,5 @@ export class UsersService {
         }
     }
 }
+
+export default new UsersService();

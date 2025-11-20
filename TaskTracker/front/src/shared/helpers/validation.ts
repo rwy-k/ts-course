@@ -7,9 +7,9 @@ export const taskSchema = z.object({
     deadline: z.string().refine((date) => validateDeadline(date), {
         message: 'Deadline must be in the future',
     }),
-    status: z.enum([Status.TODO, Status.IN_PROGRESS, Status.IN_REVIEW, Status.DONE]),
-    priority: z.enum([Priority.LOW, Priority.MEDIUM, Priority.HIGH]),
-    type: z.enum([TaskType.TASK, TaskType.STORY, TaskType.EPIC, TaskType.BUG, TaskType.FEATURE]),
+    status: z.enum(Object.values(Status)),
+    priority: z.enum(Object.values(Priority)),
+    type: z.enum(Object.values(TaskType)),
     userId: z.string(),
 });
 

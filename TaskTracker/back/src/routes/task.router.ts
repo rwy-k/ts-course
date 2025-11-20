@@ -15,8 +15,8 @@ router.get('/:id', queryParamsValidatorGetById, taskController.getTaskById);
 
 router.post('/', requestBodyValidator, taskController.createTask);
 
-router.delete('/:id', taskController.deleteTask);
+router.delete('/:id', queryParamsValidatorGetById, taskController.deleteTask);
 
-router.put('/:id', requestBodyValidator, taskController.updateTask);
+router.put('/:id', queryParamsValidatorGetById, requestBodyValidator, taskController.updateTask);
 
 export default router;

@@ -1,5 +1,11 @@
 import { useDroppable } from '@dnd-kit/core';
-import type { DroppableColumnProps } from '../types';
+import type { Status } from '../enums';
+import type { ReactNode } from 'react';
+export interface DroppableColumnProps {
+    status: Status;
+    title: string;
+    children: ReactNode;
+}
 
 export function DroppableColumn({ status, title, children }: DroppableColumnProps) {
     const { setNodeRef, isOver } = useDroppable({

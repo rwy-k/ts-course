@@ -1,7 +1,11 @@
 import '../styles/empty-state.css';
 import { useNavigate } from 'react-router-dom';
 
-export function EmptyState({ message }: { message: string }) {
+export interface EmptyStateProps {
+    message: string;
+}
+
+export function EmptyState({ message }: EmptyStateProps) {
     const navigate = useNavigate();
     return (
         <div className="empty-state">

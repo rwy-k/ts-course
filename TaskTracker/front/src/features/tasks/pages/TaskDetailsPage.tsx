@@ -2,15 +2,15 @@ import '../styles/task-details.css';
 import { TaskDetails } from '@/features/tasks/components/TaskDetails';
 import { useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { TaskService } from '@/api/task.controller';
 import type { Task } from '@/features/tasks/types';
 import { useNavigate } from 'react-router-dom';
 import { Toast } from '@/shared/components/Toast';
 import { EmptyState } from '@/shared/components/EmptyState';
 import { Loader } from '@/shared/components/Loader';
 import { ToastType } from '@/shared/types';
+import taskService from '@/api/task.controller';
 
-export function TaskDetailsPage({ taskService }: { taskService: TaskService }) {
+export function TaskDetailsPage() {
     const { id } = useParams();
     const [task, setTask] = useState<Task | null>(null);
     const [showToast, setShowToast] = useState(false);
@@ -57,7 +57,7 @@ export function TaskDetailsPage({ taskService }: { taskService: TaskService }) {
                 setTask(null);
                 setLoading(false);
             });
-    }, [id, taskService]);
+    }, [id]);
     return (
         <div className="task-details-page">
             {loading && <Loader loading={loading} />}

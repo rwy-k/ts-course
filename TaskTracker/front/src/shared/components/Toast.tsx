@@ -1,5 +1,11 @@
 import '../styles/toast.css';
-import type { ToastProps } from '../types';
+import type { ToastType } from '../types';
+
+export interface ToastProps {
+    message: string;
+    type: ToastType;
+    show: boolean;
+}
 
 export function Toast({ message, type, show }: ToastProps) {
     return (

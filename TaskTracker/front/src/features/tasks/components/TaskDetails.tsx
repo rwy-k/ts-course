@@ -1,9 +1,14 @@
 import '../styles/task-details.css';
-import type { TaskDetailsProps } from '@/features/tasks/types';
 import { formatTime, formatStatus, formatPriority } from '@/shared/helpers/formatFields';
 import { useState, useEffect } from 'react';
-import type { User } from '../types';
-import { UsersService } from '@/api/users.controller';
+import type { Task, User } from '../types';
+import usersService from '@/api/users.controller';
+
+export interface TaskDetailsProps {
+    task: Task;
+    deleteTask: (id: string) => void;
+    updateTask: (id: string) => void;
+}
 
 export function TaskDetails({ task, deleteTask, updateTask }: TaskDetailsProps) {
     const [users, setUsers] = useState<User[]>([]);
@@ -13,7 +18,6 @@ export function TaskDetails({ task, deleteTask, updateTask }: TaskDetailsProps) 
     };
 
     useEffect(() => {
-        const usersService = new UsersService();
         usersService.getUsers().then((users) => {
             setUsers(users);
         });
