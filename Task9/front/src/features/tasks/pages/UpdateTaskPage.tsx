@@ -34,7 +34,7 @@ export function UpdateTaskPage({ taskService }: { taskService: TaskService }) {
             setValue('status', task.status);
             setValue('priority', task.priority);
         });
-    }, [id, setValue]);
+    }, [id, setValue, taskService]);
 
     const onSubmit = async (data: TaskFormData) => {
         try {

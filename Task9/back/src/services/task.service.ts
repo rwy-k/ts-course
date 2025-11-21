@@ -9,20 +9,22 @@ export class TaskService {
         this.taskModel = Task;
     }
 
-
     async getTasks(filterBy: ITaskFilter) {
-        const where = Object.entries(filterBy).reduce((acc, [key, value]) => {
-            if (value && key === 'createdAt') {
-                const date = new Date(value);
-                if (isNaN(date.getTime())) {
-                    throw new Error('Invalid createdAt date');
+        const where = Object.entries(filterBy).reduce(
+            (acc, [key, value]) => {
+                if (value && key === 'createdAt') {
+                    const date = new Date(value);
+                    if (isNaN(date.getTime())) {
+                        throw new Error('Invalid createdAt date');
+                    }
+                    acc[key] = { [Op.gte]: date };
+                } else if (value) {
+                    acc[key] = { [Op.eq]: value };
                 }
-                acc[key] = { [Op.gte]: date };
-            } else if (value) {
-                acc[key] = { [Op.eq]: value };
-            }
-            return acc;
-        }, {} as Record<string, { [key: string]: string | Date }>);
+                return acc;
+            },
+            {} as Record<string, { [key: string]: string | Date }>,
+        );
 
         const tasks = await this.taskModel.findAll({ where: { [Op.and]: [where] } });
         return tasks;
@@ -34,7 +36,7 @@ export class TaskService {
         if (!uuidRegex.test(id)) {
             throw new CustomError('Invalid task ID format', 400);
         }
-        
+
         const task = await this.taskModel.findByPk(id);
         return task;
     }
@@ -49,7 +51,7 @@ export class TaskService {
         if (!uuidRegex.test(id)) {
             throw new CustomError('Invalid task ID format', 400);
         }
-        
+
         const task = await this.taskModel.findByPk(id);
         if (!task) {
             throw new CustomError('Task not found', 404);
@@ -63,7 +65,7 @@ export class TaskService {
         if (!uuidRegex.test(id)) {
             throw new CustomError('Invalid task ID format', 400);
         }
-        
+
         const task = await this.taskModel.findByPk(id);
         if (!task) {
             return await this.taskModel.create({ ...newTask, id, createdAt: new Date() });

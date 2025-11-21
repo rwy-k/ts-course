@@ -33,28 +33,33 @@ const config: DBConfig = {
         storage: ':memory:',
         logging: false,
     },
-}
+};
 
-const nodeEnv = (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test')
-    ? process.env.NODE_ENV
-    : 'development';
+const nodeEnv =
+    process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test' ? process.env.NODE_ENV : 'development';
 
 const sequelize = new Sequelize({
-    ...(config[nodeEnv]),
+    ...config[nodeEnv],
 });
 
 sequelize.addModels([Task, User]);
 
-sequelize.authenticate().then(() => {
-    console.log('Connected to the database');
-}).catch((err) => {
-    console.error('Unable to connect to the database:', err);
-});
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log('Connected to the database');
+    })
+    .catch((err) => {
+        console.error('Unable to connect to the database:', err);
+    });
 
-sequelize.sync().then(() => {
-    console.log('Database and tables created!');
-}).catch((err) => {
-    console.error('Unable to create table:', err);
-});
+sequelize
+    .sync()
+    .then(() => {
+        console.log('Database and tables created!');
+    })
+    .catch((err) => {
+        console.error('Unable to create table:', err);
+    });
 
 export default sequelize;

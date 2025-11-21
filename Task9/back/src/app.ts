@@ -17,10 +17,13 @@ app.use('/tasks', taskRouter);
 app.use('/users', userRouter);
 app.use(errorHandler);
 
-sequelize.authenticate().then(() => {
-    console.log('Connected to the database');
-}).catch((err) => {
-    console.error('Unable to connect to the database:', err);
-});
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log('Connected to the database');
+    })
+    .catch((err) => {
+        console.error('Unable to connect to the database:', err);
+    });
 
 export default app;

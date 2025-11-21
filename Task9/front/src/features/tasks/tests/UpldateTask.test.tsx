@@ -128,4 +128,54 @@ describe('UpdateTaskPage', () => {
         
         expect(await screen.findByText('Task updated successfully')).toBeInTheDocument();
     });
+
+    it('should show error when deadline is in the past', async () => {
+        const user = userEvent.setup();
+        const mockTaskService: Partial<TaskService> = {
+            getTaskById: vi.fn().mockResolvedValue(mockTask),
+            updateTask: vi.fn().mockRejectedValue(new Error('Deadline must be in the future')),
+        }
+        render(
+            <MemoryRouter initialEntries={['/tasks/1/edit']}>
+                <Routes>
+                    <Route path="/tasks/:id/edit" element={<UpdateTaskPage taskService={mockTaskService as TaskService} />} />
+                </Routes>
+            </MemoryRouter>
+        );
+        
+        await waitFor(() => screen.getByPlaceholderText('Title'));
+        
+        await user.clear(screen.getByPlaceholderText('Title'));
+        await user.type(screen.getByPlaceholderText('Title'), 'Updated Task');
+        await user.type(screen.getByLabelText(/deadline/i), '2024-12-31');
+        await user.tab();
+        const button = screen.getByRole('button', { name: /update task/i });
+        expect(button).toBeDisabled();
+        expect(await screen.findByText('Deadline must be in the future')).toBeInTheDocument();
+    });
+    it('should show error when title is empty', async () => {
+        const user = userEvent.setup();
+        const mockTaskService: Partial<TaskService> = {
+            getTaskById: vi.fn().mockResolvedValue(mockTask),
+            updateTask: vi.fn().mockResolvedValue(mockTask),
+        }
+        render(
+            <MemoryRouter initialEntries={['/tasks/1/edit']}>
+                <Routes>
+                    <Route path="/tasks/:id/edit" element={<UpdateTaskPage taskService={mockTaskService as TaskService} />} />
+                </Routes>
+            </MemoryRouter>
+        );
+        
+        await waitFor(() => screen.getByPlaceholderText('Title'));
+        
+        const titleInput = screen.getByPlaceholderText('Title');
+        await user.clear(titleInput);
+        await user.type(titleInput, 'T');
+        await user.clear(titleInput);
+        await user.tab();
+        const button = screen.getByRole('button', { name: /update task/i });
+        expect(button).toBeDisabled();
+        expect(await screen.findByText('Title must be at least 2 characters')).toBeInTheDocument();
+    });
 });

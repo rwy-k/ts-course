@@ -1,7 +1,7 @@
-import { UserService } from "../services/user.service.js";
-import { CustomError } from "../utils/customErrors.js";
+import { UserService } from '../services/user.service.js';
+import { CustomError } from '../utils/customErrors.js';
 import { Request, Response, NextFunction } from 'express';
-import { IUser } from "../types/user.types.js";
+import { IUser } from '../types/user.types.js';
 
 export class UserController {
     constructor(private readonly userService: UserService) {}

@@ -93,4 +93,42 @@ describe('CreateTaskPage', () => {
         
         expect(await screen.findByText('Task created successfully')).toBeInTheDocument();
     });
+
+    it('should show error when deadline is in the past', async () => {
+        const user = userEvent.setup();
+        const mockTaskService: Partial<TaskService> = {
+            createTask: vi.fn().mockRejectedValue(new Error('Deadline must be in the future')),
+        }
+        render(
+            <MemoryRouter>
+                <CreateTaskPage taskService={mockTaskService as TaskService} />
+            </MemoryRouter>
+        );
+        await user.type(screen.getByPlaceholderText('Title'), 'Test Task');
+        await user.type(screen.getByLabelText(/deadline/i), '2024-12-31');
+        await user.tab();
+        const button = screen.getByRole('button', { name: /create task/i });
+        expect(button).toBeDisabled();
+        expect(await screen.findByText('Deadline must be in the future')).toBeInTheDocument();
+    });
+    it('should show error when title is empty', async () => {
+        const user = userEvent.setup();
+        const mockTaskService: Partial<TaskService> = {
+            createTask: vi.fn().mockResolvedValue({}),
+        }
+        render(
+            <MemoryRouter>
+                <CreateTaskPage taskService={mockTaskService as TaskService} />
+            </MemoryRouter>
+        );
+        
+        const titleInput = screen.getByPlaceholderText('Title');
+        await user.type(titleInput, 'Test');
+        await user.clear(titleInput);
+        await user.tab();
+        const button = screen.getByRole('button', { name: /create task/i });
+        expect(button).toBeDisabled();
+        expect(await screen.findByText('Title must be at least 2 characters')).toBeInTheDocument();
+    });
+    
 });

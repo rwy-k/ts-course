@@ -26,7 +26,7 @@ export function TasksListPage({ taskService }: { taskService: TaskService }) {
                 setShowToast(false);
             }, 2000);
         });
-    }, []);
+    }, [taskService]);
 
     const viewTask = (id: string) => {
         navigate(`/tasks/${id}`);

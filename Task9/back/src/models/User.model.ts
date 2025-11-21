@@ -2,13 +2,13 @@ import { Model, Column, DataType, Table, PrimaryKey, Default, AllowNull, HasMany
 import Task from './Task.model.js';
 
 @Table({
-    tableName: 'users'
+    tableName: 'users',
 })
 export class User extends Model {
     @PrimaryKey
     @Default(DataType.UUIDV4)
     @Column(DataType.UUID)
-    declare id: string; 
+    declare id: string;
 
     @AllowNull(false)
     @Column(DataType.STRING)
