@@ -1,11 +1,11 @@
-import { Priority, Status } from "@/features/tasks/types";
+import { Priority, Status } from '@/features/tasks/types';
 
 export const formatTime = (time: Date | string) => {
     if (typeof time === 'string') {
         time = new Date(time);
     }
     return time.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-}
+};
 
 export const formatDateForInput = (date: Date | string) => {
     if (typeof date === 'string') {
@@ -13,8 +13,6 @@ export const formatDateForInput = (date: Date | string) => {
     }
     return date.toISOString().split('T')[0];
 };
-
-
 
 export const formatStatus = (status: Status) => {
     switch (status) {
@@ -25,7 +23,7 @@ export const formatStatus = (status: Status) => {
         case Status.DONE:
             return 'Done';
     }
-}
+};
 
 export const formatPriority = (priority: Priority) => {
     switch (priority) {
@@ -36,4 +34,4 @@ export const formatPriority = (priority: Priority) => {
         case Priority.HIGH:
             return 'High';
     }
-}
+};

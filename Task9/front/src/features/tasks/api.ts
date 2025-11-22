@@ -22,7 +22,7 @@ export class TaskService {
     }
     async getTaskById(id: string): Promise<Task> {
         try {
-            return fetch(`${this.API_URL}/${id}`).then(res => res.json());
+            return fetch(`${this.API_URL}/${id}`).then((res) => res.json());
         } catch (error) {
             console.error(error);
             throw error;
@@ -31,20 +31,20 @@ export class TaskService {
 
     async getTasks(): Promise<Task[]> {
         try {
-            return fetch(`${this.API_URL}`).then(res => res.json());
+            return fetch(`${this.API_URL}`).then((res) => res.json());
         } catch (error) {
             console.error(error);
             throw error;
         }
     }
-    
+
     async createTask(task: Task): Promise<Task> {
         this.validateTask(task);
         try {
             return fetch(`${this.API_URL}`, {
                 method: 'POST',
-                    body: JSON.stringify(task),
-                }).then(res => res.json());
+                body: JSON.stringify(task),
+            }).then((res) => res.json());
         } catch (error) {
             console.error(error);
             throw error;
@@ -56,22 +56,22 @@ export class TaskService {
         if (task.id !== id) {
             throw new Error('Id mismatch: ' + task.id + ' !== ' + id);
         }
-        try {   
+        try {
             return fetch(`${this.API_URL}/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify(task),
-            }).then(res => res.json());
+            }).then((res) => res.json());
         } catch (error) {
             console.error(error);
             throw error;
         }
     }
-    
+
     async deleteTaskById(id: string): Promise<void> {
         try {
             return fetch(`${this.API_URL}/${id}`, {
                 method: 'DELETE',
-            }).then(res => res.json());
+            }).then((res) => res.json());
         } catch (error) {
             console.error(error);
             throw error;

@@ -6,15 +6,30 @@ export function TaskForm({ register, errors, buttonText, handleSubmit, isDisable
     return (
         <form className="task-form" onSubmit={handleSubmit}>
             <label htmlFor="title">Title</label>
-            <input id="title" placeholder="Title" className={errors.title ? 'error' : ''} {...register('title', { required: true })} />
+            <input
+                id="title"
+                placeholder="Title"
+                className={errors.title ? 'error' : ''}
+                {...register('title', { required: true })}
+            />
             {errors.title && <p className="error">{errors.title.message}</p>}
 
             <label htmlFor="description">Description</label>
-            <input id="description" placeholder="Description" className={errors.description ? 'error' : ''} {...register('description')} />
+            <input
+                id="description"
+                placeholder="Description"
+                className={errors.description ? 'error' : ''}
+                {...register('description')}
+            />
             {errors.description && <p className="error">{errors.description.message}</p>}
 
             <label htmlFor="deadline">Deadline</label>
-            <input id="deadline" type="date" className={errors.deadline ? 'error' : ''} {...register('deadline', { required: true })} />
+            <input
+                id="deadline"
+                type="date"
+                className={errors.deadline ? 'error' : ''}
+                {...register('deadline', { required: true })}
+            />
             {errors.deadline && <p className="error">{errors.deadline.message}</p>}
 
             <label htmlFor="status">Status</label>
@@ -26,14 +41,20 @@ export function TaskForm({ register, errors, buttonText, handleSubmit, isDisable
             {errors.status && <p className="error">{errors.status.message}</p>}
 
             <label htmlFor="priority">Priority</label>
-            <select id="priority" className={errors.priority ? 'error' : ''} {...register('priority', { required: true })}>
+            <select
+                id="priority"
+                className={errors.priority ? 'error' : ''}
+                {...register('priority', { required: true })}
+            >
                 <option value={Priority.LOW}>Low</option>
                 <option value={Priority.MEDIUM}>Medium</option>
                 <option value={Priority.HIGH}>High</option>
             </select>
             {errors.priority && <p className="error">{errors.priority.message}</p>}
 
-            <button type="submit" disabled={isDisabled}>{buttonText}</button>
+            <button type="submit" disabled={isDisabled}>
+                {buttonText}
+            </button>
         </form>
-    )
+    );
 }

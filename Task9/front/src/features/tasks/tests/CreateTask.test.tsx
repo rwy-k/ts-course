@@ -5,38 +5,33 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 
+const CreateTaskPageMemoryRouter = (mockTaskService: Partial<TaskService>) => {
+    return (
+        <MemoryRouter>
+            <CreateTaskPage taskService={mockTaskService as TaskService} />
+        </MemoryRouter>
+    );
+};
 describe('CreateTaskPage', () => {
     it('should render the create task page', () => {
         const mockTaskService: Partial<TaskService> = {
             createTask: vi.fn().mockResolvedValue({}),
-        }
-        render(
-            <MemoryRouter>
-                <CreateTaskPage taskService={mockTaskService as TaskService} />
-            </MemoryRouter>
-        );
+        };
+        render(<CreateTaskPageMemoryRouter mockTaskService={mockTaskService} />);
         expect(screen.getByRole('heading', { name: /create task/i })).toBeInTheDocument();
-    });    
+    });
     it('should render the back button', () => {
         const mockTaskService: Partial<TaskService> = {
             createTask: vi.fn().mockResolvedValue({}),
-        }
-        render(
-            <MemoryRouter>
-                <CreateTaskPage taskService={mockTaskService as TaskService} />
-            </MemoryRouter>
-        );
+        };
+        render(<CreateTaskPageMemoryRouter mockTaskService={mockTaskService} />);
         expect(screen.getByText('Back')).toBeInTheDocument();
     });
     it('submit button should be disabled if the form is invalid', () => {
         const mockTaskService: Partial<TaskService> = {
             createTask: vi.fn().mockResolvedValue({}),
-        }
-        render(
-            <MemoryRouter>
-                <CreateTaskPage taskService={mockTaskService as TaskService} />
-            </MemoryRouter>
-        );
+        };
+        render(<CreateTaskPageMemoryRouter mockTaskService={mockTaskService} />);
         const button = screen.getByRole('button', { name: /create task/i });
         expect(button).toBeDisabled();
     });
@@ -44,16 +39,12 @@ describe('CreateTaskPage', () => {
         const user = userEvent.setup();
         const mockTaskService: Partial<TaskService> = {
             createTask: vi.fn().mockResolvedValue({}),
-        }
-        render(
-            <MemoryRouter>
-                <CreateTaskPage taskService={mockTaskService as TaskService} />
-            </MemoryRouter>
-        );
-        
+        };
+        render(<CreateTaskPageMemoryRouter mockTaskService={mockTaskService} />);
+
         await user.type(screen.getByPlaceholderText('Title'), 'Test Task');
         await user.type(screen.getByLabelText(/deadline/i), '2099-12-31');
-        
+
         const button = screen.getByRole('button', { name: /create task/i });
         await waitFor(() => {
             expect(button).toBeEnabled();
@@ -63,34 +54,30 @@ describe('CreateTaskPage', () => {
         const user = userEvent.setup();
         const mockTaskService: Partial<TaskService> = {
             createTask: vi.fn().mockRejectedValue(new Error('Failed to create task')),
-        }
+        };
         render(
             <MemoryRouter>
                 <CreateTaskPage taskService={mockTaskService as TaskService} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
-        
+
         await user.type(screen.getByPlaceholderText('Title'), 'Test Task');
         await user.type(screen.getByLabelText(/deadline/i), '2099-12-31');
         await user.click(screen.getByRole('button', { name: /create task/i }));
-        
+
         expect(await screen.findByText('Failed to create task')).toBeInTheDocument();
     });
     it('should show the toast when the task is created successfully', async () => {
         const user = userEvent.setup();
         const mockTaskService: Partial<TaskService> = {
             createTask: vi.fn().mockResolvedValue({}),
-        }
-        render(
-            <MemoryRouter>
-                <CreateTaskPage taskService={mockTaskService as TaskService} />
-            </MemoryRouter>
-        );
-        
+        };
+        render(<CreateTaskPageMemoryRouter mockTaskService={mockTaskService} />);
+
         await user.type(screen.getByPlaceholderText('Title'), 'Test Task');
         await user.type(screen.getByLabelText(/deadline/i), '2099-12-31');
         await user.click(screen.getByRole('button', { name: /create task/i }));
-        
+
         expect(await screen.findByText('Task created successfully')).toBeInTheDocument();
     });
 
@@ -98,11 +85,11 @@ describe('CreateTaskPage', () => {
         const user = userEvent.setup();
         const mockTaskService: Partial<TaskService> = {
             createTask: vi.fn().mockRejectedValue(new Error('Deadline must be in the future')),
-        }
+        };
         render(
             <MemoryRouter>
                 <CreateTaskPage taskService={mockTaskService as TaskService} />
-            </MemoryRouter>
+            </MemoryRouter>,
         );
         await user.type(screen.getByPlaceholderText('Title'), 'Test Task');
         await user.type(screen.getByLabelText(/deadline/i), '2024-12-31');
@@ -115,13 +102,9 @@ describe('CreateTaskPage', () => {
         const user = userEvent.setup();
         const mockTaskService: Partial<TaskService> = {
             createTask: vi.fn().mockResolvedValue({}),
-        }
-        render(
-            <MemoryRouter>
-                <CreateTaskPage taskService={mockTaskService as TaskService} />
-            </MemoryRouter>
-        );
-        
+        };
+        render(<CreateTaskPageMemoryRouter mockTaskService={mockTaskService} />);
+
         const titleInput = screen.getByPlaceholderText('Title');
         await user.type(titleInput, 'Test');
         await user.clear(titleInput);
@@ -130,5 +113,4 @@ describe('CreateTaskPage', () => {
         expect(button).toBeDisabled();
         expect(await screen.findByText('Title must be at least 2 characters')).toBeInTheDocument();
     });
-    
 });

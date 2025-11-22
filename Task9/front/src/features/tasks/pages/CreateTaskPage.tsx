@@ -1,23 +1,28 @@
 import '../styles/create-task.css';
-import { TaskForm } from "../components/TaskForm";
-import { useForm } from "react-hook-form";
+import { TaskForm } from '../components/TaskForm';
+import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { type TaskFormData, Status, Priority } from "../types";
-import { taskSchema } from "@/shared/helpers/validation";
+import { type TaskFormData, Status, Priority } from '../types';
+import { taskSchema } from '@/shared/helpers/validation';
 import { Toast } from '@/shared/components/Toast';
-import type { TaskService } from "../api";
+import type { TaskService } from '../api';
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
 
 export function CreateTaskPage({ taskService }: { taskService: TaskService }) {
     const navigate = useNavigate();
-    
+
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [toastType, setToastType] = useState<'success' | 'error'>('success');
 
-    const { register, handleSubmit, formState: { errors, isDirty }, reset } = useForm<TaskFormData>({
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isDirty },
+        reset,
+    } = useForm<TaskFormData>({
         mode: 'onBlur',
         resolver: zodResolver(taskSchema),
         defaultValues: {
@@ -28,7 +33,6 @@ export function CreateTaskPage({ taskService }: { taskService: TaskService }) {
             priority: Priority.LOW,
         },
     });
-
 
     const onSubmit = async (data: TaskFormData) => {
         try {
@@ -52,7 +56,7 @@ export function CreateTaskPage({ taskService }: { taskService: TaskService }) {
                 setShowToast(false);
             }, 2000);
         }
-    }
+    };
 
     const isDisabled = Object.keys(errors).length > 0 || !isDirty;
 
@@ -61,9 +65,15 @@ export function CreateTaskPage({ taskService }: { taskService: TaskService }) {
             <div className="create-task-page-header">
                 <h1>Create Task</h1>
             </div>
-            <TaskForm register={register} errors={errors} buttonText="Create Task" handleSubmit={handleSubmit(onSubmit)} isDisabled={isDisabled} />
+            <TaskForm
+                register={register}
+                errors={errors}
+                buttonText="Create Task"
+                handleSubmit={handleSubmit(onSubmit)}
+                isDisabled={isDisabled}
+            />
             <button onClick={() => navigate('/')}>Back</button>
             <Toast message={toastMessage} type={toastType} show={showToast} />
         </div>
-    )
+    );
 }

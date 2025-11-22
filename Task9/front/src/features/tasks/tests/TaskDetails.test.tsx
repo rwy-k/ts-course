@@ -15,57 +15,42 @@ const mockTask = {
     status: Status.TODO,
     priority: Priority.HIGH,
 };
+const TaskDetailsPageMemoryRouter = (mockTaskService: Partial<TaskService>) => {
+    return (
+        <MemoryRouter initialEntries={['/tasks/1']}>
+            <Routes>
+                <Route path="/tasks/:id" element={<TaskDetailsPage taskService={mockTaskService as TaskService} />} />
+            </Routes>
+        </MemoryRouter>
+    );
+};
 describe('TaskDetailsPage', () => {
     it('should render the task details page', async () => {
         const mockTaskService: Partial<TaskService> = {
             getTaskById: vi.fn().mockResolvedValue(mockTask),
-        }
-        render(
-            <MemoryRouter initialEntries={['/tasks/1']}>
-                <Routes>
-                    <Route path="/tasks/:id" element={<TaskDetailsPage taskService={mockTaskService as TaskService} />} />
-                </Routes>
-            </MemoryRouter>
-        );
+        };
+        render(<TaskDetailsPageMemoryRouter mockTaskService={mockTaskService} />);
         expect(await screen.findByRole('heading', { name: /task details/i })).toBeInTheDocument();
     });
     it('should render the back button', async () => {
         const mockTaskService: Partial<TaskService> = {
             getTaskById: vi.fn().mockResolvedValue(mockTask),
-        }
-        render(
-            <MemoryRouter initialEntries={['/tasks/1']}>
-                <Routes>
-                    <Route path="/tasks/:id" element={<TaskDetailsPage taskService={mockTaskService as TaskService} />} />
-                </Routes>
-            </MemoryRouter>
-        );
+        };
+        render(<TaskDetailsPageMemoryRouter mockTaskService={mockTaskService} />);
         expect(screen.getByText('Back')).toBeInTheDocument();
     });
     it('should render the delete button', async () => {
         const mockTaskService: Partial<TaskService> = {
             getTaskById: vi.fn().mockResolvedValue(mockTask),
-        }
-        render(
-            <MemoryRouter initialEntries={['/tasks/1']}>
-                <Routes>
-                    <Route path="/tasks/:id" element={<TaskDetailsPage taskService={mockTaskService as TaskService} />} />
-                </Routes>
-            </MemoryRouter>
-        );
+        };
+        render(<TaskDetailsPageMemoryRouter mockTaskService={mockTaskService} />);
         expect(await screen.findByText('Delete')).toBeInTheDocument();
     });
     it('should render the update button', async () => {
         const mockTaskService: Partial<TaskService> = {
             getTaskById: vi.fn().mockResolvedValue(mockTask),
-        }
-        render(
-            <MemoryRouter initialEntries={['/tasks/1']}>
-                <Routes>
-                    <Route path="/tasks/:id" element={<TaskDetailsPage taskService={mockTaskService as TaskService} />} />
-                </Routes>
-            </MemoryRouter>
-        );
+        };
+        render(<TaskDetailsPageMemoryRouter mockTaskService={mockTaskService} />);
         expect(await screen.findByText('Update')).toBeInTheDocument();
     });
     it('should show the toast when got an error deleting a task', async () => {
@@ -73,18 +58,21 @@ describe('TaskDetailsPage', () => {
         const mockTaskService: Partial<TaskService> = {
             getTaskById: vi.fn().mockResolvedValue(mockTask),
             deleteTaskById: vi.fn().mockRejectedValue(new Error('Failed to delete task')),
-        }
+        };
         render(
             <MemoryRouter initialEntries={['/tasks/1']}>
                 <Routes>
-                    <Route path="/tasks/:id" element={<TaskDetailsPage taskService={mockTaskService as TaskService} />} />
+                    <Route
+                        path="/tasks/:id"
+                        element={<TaskDetailsPage taskService={mockTaskService as TaskService} />}
+                    />
                 </Routes>
-            </MemoryRouter>
+            </MemoryRouter>,
         );
-        
+
         await waitFor(() => screen.getByText('Delete'));
         await user.click(screen.getByText('Delete'));
-        
+
         expect(await screen.findByText('Failed to delete task')).toBeInTheDocument();
     });
     it('should show the toast when the task is deleted successfully', async () => {
@@ -92,46 +80,28 @@ describe('TaskDetailsPage', () => {
         const mockTaskService: Partial<TaskService> = {
             getTaskById: vi.fn().mockResolvedValue(mockTask),
             deleteTaskById: vi.fn().mockResolvedValue(undefined),
-        }
-        render(
-            <MemoryRouter initialEntries={['/tasks/1']}>
-                <Routes>
-                    <Route path="/tasks/:id" element={<TaskDetailsPage taskService={mockTaskService as TaskService} />} />
-                </Routes>
-            </MemoryRouter>
-        );
-        
+        };
+        render(<TaskDetailsPageMemoryRouter mockTaskService={mockTaskService} />);
+
         await waitFor(() => screen.getByText('Delete'));
         await user.click(screen.getByText('Delete'));
-        
+
         expect(await screen.findByText('Task deleted successfully')).toBeInTheDocument();
     });
     it('should render the task details', async () => {
         const mockTaskService: Partial<TaskService> = {
             getTaskById: vi.fn().mockResolvedValue(mockTask),
-        }
-        render(
-            <MemoryRouter initialEntries={['/tasks/1']}>
-                <Routes>
-                    <Route path="/tasks/:id" element={<TaskDetailsPage taskService={mockTaskService as TaskService} />} />
-                </Routes>
-            </MemoryRouter>
-        );
-        
+        };
+        render(<TaskDetailsPageMemoryRouter mockTaskService={mockTaskService} />);
+
         expect(await screen.findByText('Test Task')).toBeInTheDocument();
         expect(screen.getByText('Test Description')).toBeInTheDocument();
     });
     it('should show an empty state when the task is not found', async () => {
         const mockTaskService: Partial<TaskService> = {
             getTaskById: vi.fn().mockRejectedValue(new Error('Task not found')),
-        }
-        render(
-            <MemoryRouter initialEntries={['/tasks/1']}>
-                <Routes>
-                    <Route path="/tasks/:id" element={<TaskDetailsPage taskService={mockTaskService as TaskService} />} />
-                </Routes>
-            </MemoryRouter>
-        );
+        };
+        render(<TaskDetailsPageMemoryRouter mockTaskService={mockTaskService} />);
         expect(screen.getByText('Task not found')).toBeInTheDocument();
     });
 });

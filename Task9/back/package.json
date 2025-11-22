@@ -7,7 +7,7 @@
     "type": "module",
     "scripts": {
         "dev": "tsx watch src/server.ts",
-        "build": "tsc",
+        "build": "tsc -b tsconfig.build.json",
         "test": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest --runInBand",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",

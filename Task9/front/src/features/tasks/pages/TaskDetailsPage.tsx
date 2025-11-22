@@ -37,20 +37,24 @@ export function TaskDetailsPage({ taskService }: { taskService: TaskService }) {
     };
     useEffect(() => {
         if (!id) return;
-        taskService.getTaskById(id).then((task) => {
-            setTask(task);
-        }).catch(() => {
-            setTask(null);
-        });
+        taskService
+            .getTaskById(id)
+            .then((task) => {
+                setTask(task);
+            })
+            .catch(() => {
+                setTask(null);
+            });
     }, [id, taskService]);
     return (
         <div className="task-details-page">
-            {task 
-             ? <TaskDetails task={task} deleteTask={deleteTask} updateTask={updateTask} />
-             : <EmptyState message="Task not found" />
-             }
+            {task ? (
+                <TaskDetails task={task} deleteTask={deleteTask} updateTask={updateTask} />
+            ) : (
+                <EmptyState message="Task not found" />
+            )}
             <button onClick={() => navigate('/')}>Back</button>
             <Toast message={toastMessage} type={toastType} show={showToast} />
-    </div>
-    )
+        </div>
+    );
 }

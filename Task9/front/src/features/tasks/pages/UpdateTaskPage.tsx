@@ -19,7 +19,12 @@ export function UpdateTaskPage({ taskService }: { taskService: TaskService }) {
     const [toastMessage, setToastMessage] = useState('');
     const [toastType, setToastType] = useState<'success' | 'error'>('success');
     const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors, isDirty }, setValue } = useForm<TaskFormData>({
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isDirty },
+        setValue,
+    } = useForm<TaskFormData>({
         mode: 'onBlur',
         resolver: zodResolver(taskSchema),
     });
@@ -56,16 +61,26 @@ export function UpdateTaskPage({ taskService }: { taskService: TaskService }) {
                 setShowToast(false);
             }, 2000);
         }
-    }
+    };
     const isDisabled = Object.keys(errors).length > 0 || !isDirty;
     return (
         <div className="update-task-page">
             <div className="update-task-page-header">
                 <h1>Update Task</h1>
             </div>
-            {task ? <TaskForm register={register} errors={errors} buttonText="Update Task" handleSubmit={handleSubmit(onSubmit)} isDisabled={isDisabled} /> : <EmptyState message="Task not found" />}
+            {task ? (
+                <TaskForm
+                    register={register}
+                    errors={errors}
+                    buttonText="Update Task"
+                    handleSubmit={handleSubmit(onSubmit)}
+                    isDisabled={isDisabled}
+                />
+            ) : (
+                <EmptyState message="Task not found" />
+            )}
             <button onClick={() => navigate(`/tasks/${id}`)}>Back</button>
             <Toast message={toastMessage} type={toastType} show={showToast} />
         </div>
-    )
+    );
 }
