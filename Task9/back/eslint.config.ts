@@ -22,7 +22,6 @@ export default defineConfig([
     {
         plugins: { prettier: prettierPlugin },
         rules: {
-            '@typescript-eslint/no-explicit-any': 'error',
             'prettier/prettier': 'error',
         },
     },

@@ -34,10 +34,10 @@ const mockTasks = [
         priority: Priority.LOW,
     },
 ];
-const TasksListPageMemoryRouter = (mockTaskService: Partial<TaskService>) => {
+const TasksListPageMemoryRouter = ({ mockTaskService }: { mockTaskService: Partial<TaskService> }) => {
     return (
         <MemoryRouter>
-            <TasksListPage taskService={mockTaskService as TaskService} />
+            <TasksListPage taskService={mockTaskService} />
         </MemoryRouter>
     );
 };

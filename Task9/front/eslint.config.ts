@@ -51,14 +51,6 @@ export default defineConfig([
         files: ['**/*.{ts,tsx,mts,cts}'],
         plugins: { prettier: prettierPlugin },
         rules: {
-            '@typescript-eslint/no-explicit-any': 'error',
-            'prettier/prettier': 'error',
-        },
-    },
-    {
-        files: ['**/*.{js,mjs,cjs,jsx}'],
-        plugins: { prettier: prettierPlugin },
-        rules: {
             'prettier/prettier': 'error',
         },
     },

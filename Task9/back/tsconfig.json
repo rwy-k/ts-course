@@ -8,8 +8,6 @@
 
         "types": ["node", "jest"],
         "sourceMap": true,
-        "declaration": true,
-        "declarationMap": true,
         "noUncheckedIndexedAccess": true,
         "exactOptionalPropertyTypes": false,
         "strict": true,

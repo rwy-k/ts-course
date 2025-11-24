@@ -15,14 +15,11 @@ const mockTask = {
     status: Status.TODO,
     priority: Priority.HIGH,
 };
-const UpdateTaskPageMemoryRouter = (mockTaskService: Partial<TaskService>) => {
+const UpdateTaskPageMemoryRouter = ({ mockTaskService }: { mockTaskService: Partial<TaskService> }) => {
     return (
         <MemoryRouter initialEntries={['/tasks/1/edit']}>
             <Routes>
-                <Route
-                    path="/tasks/:id/edit"
-                    element={<UpdateTaskPage taskService={mockTaskService as TaskService} />}
-                />
+                <Route path="/tasks/:id/edit" element={<UpdateTaskPage taskService={mockTaskService} />} />
             </Routes>
         </MemoryRouter>
     );

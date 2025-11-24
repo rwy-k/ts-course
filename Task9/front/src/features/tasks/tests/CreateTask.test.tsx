@@ -5,10 +5,10 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 
-const CreateTaskPageMemoryRouter = (mockTaskService: Partial<TaskService>) => {
+const CreateTaskPageMemoryRouter = ({ mockTaskService }: { mockTaskService: Partial<TaskService> }) => {
     return (
         <MemoryRouter>
-            <CreateTaskPage taskService={mockTaskService as TaskService} />
+            <CreateTaskPage taskService={mockTaskService} />
         </MemoryRouter>
     );
 };
@@ -57,7 +57,7 @@ describe('CreateTaskPage', () => {
         };
         render(
             <MemoryRouter>
-                <CreateTaskPage taskService={mockTaskService as TaskService} />
+                <CreateTaskPage taskService={mockTaskService} />
             </MemoryRouter>,
         );
 
@@ -88,7 +88,7 @@ describe('CreateTaskPage', () => {
         };
         render(
             <MemoryRouter>
-                <CreateTaskPage taskService={mockTaskService as TaskService} />
+                <CreateTaskPage taskService={mockTaskService} />
             </MemoryRouter>,
         );
         await user.type(screen.getByPlaceholderText('Title'), 'Test Task');

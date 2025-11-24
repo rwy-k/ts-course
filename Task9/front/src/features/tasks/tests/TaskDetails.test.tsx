@@ -15,11 +15,11 @@ const mockTask = {
     status: Status.TODO,
     priority: Priority.HIGH,
 };
-const TaskDetailsPageMemoryRouter = (mockTaskService: Partial<TaskService>) => {
+const TaskDetailsPageMemoryRouter = ({ mockTaskService }: { mockTaskService: Partial<TaskService> }) => {
     return (
         <MemoryRouter initialEntries={['/tasks/1']}>
             <Routes>
-                <Route path="/tasks/:id" element={<TaskDetailsPage taskService={mockTaskService as TaskService} />} />
+                <Route path="/tasks/:id" element={<TaskDetailsPage taskService={mockTaskService} />} />
             </Routes>
         </MemoryRouter>
     );
@@ -62,10 +62,7 @@ describe('TaskDetailsPage', () => {
         render(
             <MemoryRouter initialEntries={['/tasks/1']}>
                 <Routes>
-                    <Route
-                        path="/tasks/:id"
-                        element={<TaskDetailsPage taskService={mockTaskService as TaskService} />}
-                    />
+                    <Route path="/tasks/:id" element={<TaskDetailsPage taskService={mockTaskService} />} />
                 </Routes>
             </MemoryRouter>,
         );
